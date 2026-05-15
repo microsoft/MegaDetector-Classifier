@@ -22,7 +22,6 @@ MegaDetector-Classifier is one tool in a larger open-source ecosystem from the M
 | [microsoft/MegaDetector-Sonar](https://github.com/microsoft/MegaDetector-Sonar) | Sonar-based wildlife detection for aquatic monitoring |
 | [microsoft/MegaDetector-Classifier](https://github.com/microsoft/MegaDetector-Classifier) | **This repo** — classification fine-tuning for camera-trap species identification |
 | [microsoft/SPARROW](https://github.com/microsoft/SPARROW) | Solar-Powered Acoustic and Remote Recording Observation Watch — AI-enabled edge device for field recording |
-| [microsoft/SPARROW-Studio](https://github.com/microsoft/SPARROW-Studio) | Desktop application for all AI for Good Lab models |
 
 ## Overview
 
