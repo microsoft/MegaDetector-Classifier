@@ -118,6 +118,38 @@ unzip demo_data_clf.zip -d data/
 
 Then set `dataset_root: ./data/imgs` in `configs/config.yaml` and run `python main.py`.
 
+## Loading PytorchWildlife classifiers
+
+In addition to training a custom classifier, MegaDetector-Classifier ships a PyTorch-Wildlife–compatible inference layer. Pretrained species classifiers can be loaded with a single import — the same `classification` subpackage layout that PyTorch-Wildlife exposes:
+
+```python
+from src.models import classification as pw_classification
+
+# Pick any of the available loaders below
+model = pw_classification.AI4GAmazonRainforest(device="cuda")
+results = model.single_image_classification("path/to/image.jpg")
+```
+
+Available loaders:
+
+- `AI4GAmazonRainforest` — Amazon Rainforest species classifier (ResNet-50, v1/v2 weights)
+- `AI4GOpossum` — binary opossum / not-opossum classifier (ResNet-50)
+- `AI4GSnapshotSerengeti` — Snapshot Serengeti 10-class classifier (ResNet-18)
+- `CustomWeights` — load your own ResNet weights (e.g. those produced by `main.py`)
+- `DeepfauneClassifier` — Deepfaune ViT-L/14 DINOv2 classifier (timm backbone)
+- `DFNE` — DFNE ViT-L/14 DINOv2 classifier (timm backbone)
+- `SpeciesNetTFInference` — SpeciesNet TensorFlow classifier (optional, see below)
+
+### Optional: SpeciesNet
+
+`SpeciesNetTFInference` depends on the `speciesnet` package, which pulls in TensorFlow. It is **not** installed by `requirements.txt` / `environment.yaml`. To enable it:
+
+```bash
+pip install speciesnet
+```
+
+If `speciesnet` is not installed, `from src.models import classification` still succeeds — only instantiating `SpeciesNetTFInference()` raises an `ImportError` with installation instructions.
+
 ## Repository Structure
 
 ```
@@ -130,10 +162,18 @@ MegaDetector-Classifier/
 └── src/
     ├── algorithms/
     │   └── plain.py                 # Training algorithm (PyTorch Lightning)
+    ├── data/                        # Inference data layer (PyTorch-Wildlife-compatible)
+    │   ├── transforms.py            # Classification / MegaDetector transforms
+    │   └── datasets.py              # ImageFolder / DetectionCrops loaders
     ├── datasets/
-    │   └── custom.py                # Custom dataset loader
+    │   └── custom.py                # Custom training dataset loader
     ├── models/
-    │   └── plain_resnet.py          # ResNet-18/50 classifier
+    │   ├── plain_resnet.py          # ResNet-18/50 training classifier
+    │   └── classification/          # Inference classifiers (PyTorch-Wildlife-compatible)
+    │       ├── base_classifier.py
+    │       ├── resnet_base/         # AI4GAmazon, AI4GOpossum, Serengeti, CustomWeights
+    │       ├── timm_base/           # DeepfauneClassifier, DFNE
+    │       └── speciesnet_base/     # SpeciesNetTFInference (optional)
     └── utils/
         ├── batch_detection_cropping.py   # MegaDetector crop integration
         ├── data_splitting.py             # Random / location / sequence splits

@@ -3,3 +3,8 @@ scikit_learn
 lightning
 munch
 typer
+timm
+wget
+supervision
+Pillow
+tqdm
