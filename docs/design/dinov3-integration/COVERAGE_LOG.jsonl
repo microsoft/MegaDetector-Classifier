@@ -22,3 +22,15 @@
 {"round":1,"agent":"inquisitor","file":"test-strategy","action":"verified","report_anchor":"round_01/inquisitor_review.md#test-strategy"}
 {"round":1,"agent":"inquisitor","file":"acceptance-and-validation","action":"verified","report_anchor":"round_01/inquisitor_review.md#acceptance-and-validation"}
 {"round":1,"agent":"inquisitor","file":"risk-and-rollback","action":"verified","report_anchor":"round_01/inquisitor_review.md#risk-and-rollback"}
+{"round":2,"agent":"inquisitor","file":"phase-decomposition","action":"verified","report_anchor":"round_02/inquisitor_review.md#phase-decomposition"}
+{"round":2,"agent":"inquisitor","file":"mixup-utility-phase","action":"verified","report_anchor":"round_02/inquisitor_review.md#mixup-utility-phase"}
+{"round":2,"agent":"inquisitor","file":"model-and-algorithm-phase","action":"verified","report_anchor":"round_02/inquisitor_review.md#model-and-algorithm-phase"}
+{"round":2,"agent":"inquisitor","file":"full-finetune-phase","action":"verified","report_anchor":"round_02/inquisitor_review.md#full-finetune-phase"}
+{"round":2,"agent":"inquisitor","file":"peft-phase","action":"verified","report_anchor":"round_02/inquisitor_review.md#peft-phase"}
+{"round":2,"agent":"inquisitor","file":"inference-loader-phase","action":"verified","report_anchor":"round_02/inquisitor_review.md#inference-loader-phase"}
+{"round":2,"agent":"inquisitor","file":"config-and-docs-phase","action":"verified","report_anchor":"round_02/inquisitor_review.md#config-and-docs-phase"}
+{"round":2,"agent":"inquisitor","file":"bug-fix-phase","action":"verified","report_anchor":"round_02/inquisitor_review.md#bug-fix-phase"}
+{"round":2,"agent":"inquisitor","file":"regression-protection","action":"verified","report_anchor":"round_02/inquisitor_review.md#regression-protection"}
+{"round":2,"agent":"inquisitor","file":"test-strategy","action":"verified","report_anchor":"round_02/inquisitor_review.md#test-strategy"}
+{"round":2,"agent":"inquisitor","file":"acceptance-and-validation","action":"verified","report_anchor":"round_02/inquisitor_review.md#acceptance-and-validation"}
+{"round":2,"agent":"inquisitor","file":"risk-and-rollback","action":"verified","report_anchor":"round_02/inquisitor_review.md#risk-and-rollback"}
