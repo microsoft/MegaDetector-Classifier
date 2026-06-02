@@ -46,6 +46,25 @@ data_transforms = {
     ]),
 }
 
+
+def _build_data_transforms(image_size: int) -> dict:
+    return {
+        'train': transforms.Compose([
+            transforms.RandomResizedCrop((image_size, image_size), scale=(0.7, 1.0), ratio=(0.8, 1.2)),
+            transforms.RandomHorizontalFlip(p=0.5),
+            transforms.RandomVerticalFlip(p=0.5),
+            transforms.ColorJitter(brightness=0.2, contrast=0.2, saturation=0.2, hue=0.2),
+            transforms.ToTensor(),
+            transforms.Normalize(mean, std)
+        ]),
+        'val': transforms.Compose([
+            transforms.Resize((image_size, image_size)),
+            transforms.ToTensor(),
+            transforms.Normalize(mean, std)
+        ]),
+    }
+
+
 class Custom_Base_DS(Dataset):
     """
     Base dataset class for handling custom datasets.
@@ -182,17 +201,18 @@ class Custom_Base(pl.LightningDataModule):
         self.train_class_counts = None
 
         self.conf = conf
+        active_transforms = getattr(self, '_dinov3_transforms', data_transforms)
 
         print('Loading datasets...')
         # Load datasets for different modes (training, validation, testing, prediction)
         if self.conf.predict:
-            self.dset_pr = self.ds(rootdir=self.conf.predict_root, dset='predict', transform=data_transforms['val'])
+            self.dset_pr = self.ds(rootdir=self.conf.predict_root, dset='predict', transform=active_transforms['val'])
         elif self.conf.test:
-            self.dset_te = self.ds(rootdir=self.conf.dataset_root, dset='test', transform=data_transforms['val'])
+            self.dset_te = self.ds(rootdir=self.conf.dataset_root, dset='test', transform=active_transforms['val'])
             self.id_to_labels = {i: l for i, l in np.unique(pd.Series(zip(self.dset_te.label_ids, self.dset_te.labels)))}
         else:
-            self.dset_tr = self.ds(rootdir=self.conf.dataset_root, dset='train', transform=data_transforms['train'])
-            self.dset_val = self.ds(rootdir=self.conf.dataset_root, dset='val', transform=data_transforms['val'])
+            self.dset_tr = self.ds(rootdir=self.conf.dataset_root, dset='train', transform=active_transforms['train'])
+            self.dset_val = self.ds(rootdir=self.conf.dataset_root, dset='val', transform=active_transforms['val'])
 
             self.id_to_labels = {i: l for i, l in np.unique(pd.Series(zip(self.dset_tr.label_ids, self.dset_tr.labels)))}
             # Calculate class counts and label mappings
@@ -244,12 +264,16 @@ class Custom_Crop(Custom_Base):
     Inherits from Custom_Base and specifies the dataset type as Custom_Crop_DS.
     """
 
-    def __init__(self, conf):
+    def __init__(self, conf, image_size: int = 224):
         """
         Initialize the Custom_Crop data module with configuration.
 
         Args:
             conf (object): Configuration object containing dataset paths and other settings.
+            image_size (int): Spatial dimension for train/val transforms.
         """
         self.ds = Custom_Crop_DS
+        self.image_size = image_size
+        if image_size != 224:
+            self._dinov3_transforms = _build_data_transforms(image_size)
         super().__init__(conf=conf)

@@ -8,3 +8,4 @@ wget
 supervision
 Pillow
 tqdm
+# DINOv3 training/inference: pip install -r requirements-dinov3.txt
