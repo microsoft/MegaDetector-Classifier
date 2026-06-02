@@ -1,0 +1,27 @@
+{
+  "skill": "implement",
+  "convergence_mode": "editing",
+  "created_round": 1,
+  "created_at": "2026-06-02T03:25:35Z",
+  "repo_root": "/shared/home/aahernandez/MegaDetector-Classifier",
+  "scope_items": [
+    {
+      "id": "p5-loader-v1-and-docs",
+      "type": "subtask",
+      "coder": "coder-p5",
+      "owned_files": [
+        "src/models/classification/dinov3_base/__init__.py",
+        "src/models/classification/dinov3_base/base_classifier.py",
+        "src/models/classification/dinov3_base/custom_weights.py",
+        "src/models/classification/__init__.py",
+        "docs/dinov3_experimental.md",
+        "tests/regression/test_dinov3_absent_actionable_error.py",
+        "tests/integration/test_dinov3_custom_weights_mdckpt.py",
+        "tests/unit/test_extract_state_dict_v1.py"
+      ],
+      "description": "Phase 5 (MVP loader): DINOv3BaseInference + DINOv3CustomWeights (v1 _extract_state_dict handles state_dict + net. prefix only; SINCHI flavors raise NotImplementedError); package-level __getattr__ in src/models/classification/__init__.py for actionable ImportError; minimal docs stub; I13 absent-env test + integration test + unit test",
+      "added_round": 1
+    }
+  ],
+  "anti_narrowing_clause": "This ledger covers Phase 5 ONLY (Loader v1, MD-Cls ckpt only). Phases 0-4 (already converged) and Phases 6-9 are out of scope. SINCHI flavours raise NotImplementedError. ImportError message MUST contain 'pip install -r requirements-dinov3.txt' (directive #7). _extract_state_dict v1 handles only state_dict + net. prefix; SINCHI flavours land in P8. New in-scope subtasks may be APPENDED with added_round marker; existing entries may NEVER be removed."
+}
