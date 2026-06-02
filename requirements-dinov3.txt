@@ -1,0 +1,3 @@
+transformers>=4.43,<5
+peft>=0.10.0,<0.14.0
+huggingface_hub>=0.20,<1
