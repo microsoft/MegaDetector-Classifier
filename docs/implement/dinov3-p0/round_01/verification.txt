@@ -1,0 +1,31 @@
+=== pytest (default exclusions; isolated_env/slow/requires_hf/gpu/requires_dinov3 excluded) ===
+warning: No `requires-python` value found in the workspace. Defaulting to `>=3.10`.
+============================= test session starts ==============================
+platform linux -- Python 3.10.12, pytest-8.4.2, pluggy-1.6.0 -- /shared/home/aahernandez/MegaDetector-Classifier/.venv/bin/python3
+cachedir: .pytest_cache
+rootdir: /shared/home/aahernandez/MegaDetector-Classifier
+configfile: pyproject.toml
+plugins: cov-7.1.0, anyio-4.13.0
+collecting ... collected 19 items / 2 deselected / 17 selected
+
+tests/regression/test_customweights_num_layers.py::test_customweights_loads_resnet18 XFAIL [  5%]
+tests/regression/test_customweights_num_layers.py::test_customweights_loads_resnet50 PASSED [ 11%]
+tests/regression/test_invariants.py::test_requirements_runtime_lines_hash PASSED [ 17%]
+tests/regression/test_invariants.py::test_default_config_yaml_equal PASSED [ 23%]
+tests/regression/test_invariants.py::test_plain_algorithm_class_identity PASSED [ 29%]
+tests/regression/test_invariants.py::test_plain_resnet_class_identity PASSED [ 35%]
+tests/regression/test_invariants.py::test_main_unchanged PASSED          [ 41%]
+tests/regression/test_invariants.py::test_plain_py_unchanged PASSED      [ 47%]
+tests/regression/test_invariants.py::test_plain_resnet_py_unchanged PASSED [ 52%]
+tests/regression/test_invariants.py::test_custom_dataset_byte_or_behaviour PASSED [ 58%]
+tests/regression/test_invariants.py::test_customweights_legacy_call_signature PASSED [ 64%]
+tests/regression/test_resnet_baseline_predictions.py::test_resnet_baseline_prediction[0] PASSED [ 70%]
+tests/regression/test_resnet_baseline_predictions.py::test_resnet_baseline_prediction[1] PASSED [ 76%]
+tests/regression/test_resnet_baseline_predictions.py::test_resnet_baseline_prediction[2] PASSED [ 82%]
+tests/regression/test_resnet_baseline_predictions.py::test_resnet_baseline_prediction[3] PASSED [ 88%]
+tests/regression/test_resnet_baseline_predictions.py::test_resnet_baseline_prediction[4] PASSED [ 94%]
+tests/regression/test_resnet_baseline_predictions.py::test_resnet_baseline_prediction[5] PASSED [100%]
+
+=========================== short test summary info ============================
+XFAIL tests/regression/test_customweights_num_layers.py::test_customweights_loads_resnet18 - bug fixed in Phase 1: CustomWeights hard-codes num_layers=50
+============ 16 passed, 2 deselected, 1 xfailed in 61.61s (0:01:01) ============
