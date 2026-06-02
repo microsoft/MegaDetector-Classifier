@@ -1,7 +1,6 @@
 from pathlib import Path
 import sys
 
-import pytest
 import torch
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
@@ -40,7 +39,6 @@ def _make_synth_ckpt(arch: str, num_cls: int = 2) -> dict[str, dict[str, torch.T
     return {"state_dict": state_dict}
 
 
-@pytest.mark.xfail(strict=True, reason="bug fixed in Phase 1: CustomWeights hard-codes num_layers=50")
 def test_customweights_loads_resnet18(tmp_path: Path) -> None:
     from src.models.classification import CustomWeights
 
