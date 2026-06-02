@@ -8,3 +8,8 @@
 {"round":1,"agent":"inquisitor","file":"p0-baseline","action":"verified","commit":"94fd71194d09a91f3b5434325724328695e6c6ef","signature":"test_resnet_baseline_prediction","report_anchor":"round_01/inquisitor_review.md#p0-baseline"}
 {"round":1,"agent":"inquisitor","file":"p0-rollback","action":"verified","commit":"c97fb4cea6f680e5a0b6b556e8b604e899e91cf9","signature":"dryrun_revert.sh","report_anchor":"round_01/inquisitor_review.md#p0-rollback"}
 {"round":1,"agent":"inquisitor","file":"p0-fixtures-xfail","action":"verified","commit":"803cc5948f7267561d8f6d0138346cdcc7716fe4","signature":"test_customweights_loads_resnet18","report_anchor":"round_01/inquisitor_review.md#p0-fixtures-xfail"}
+{"round":2,"agent":"inquisitor","file":"p0-infra","action":"verified","report_anchor":"round_02/inquisitor_review.md#p0-infra"}
+{"round":2,"agent":"inquisitor","file":"p0-invariants","action":"verified","report_anchor":"round_02/inquisitor_review.md#p0-invariants"}
+{"round":2,"agent":"inquisitor","file":"p0-baseline","action":"verified","report_anchor":"round_02/inquisitor_review.md#p0-baseline"}
+{"round":2,"agent":"inquisitor","file":"p0-rollback","action":"verified","report_anchor":"round_02/inquisitor_review.md#p0-rollback"}
+{"round":2,"agent":"inquisitor","file":"p0-fixtures-xfail","action":"verified","report_anchor":"round_02/inquisitor_review.md#p0-fixtures-xfail"}
