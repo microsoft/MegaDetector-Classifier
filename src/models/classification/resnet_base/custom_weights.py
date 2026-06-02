@@ -21,7 +21,7 @@ class CustomWeights(PlainResNetInference):
     IMAGE_SIZE = 224
 
 
-    def __init__(self, weights=None, class_names=None, device="cpu"):
+    def __init__(self, weights=None, class_names=None, device="cpu", num_layers: int = 50):
         """
         Initialize the CustomWeights Classifier.
 
@@ -29,11 +29,12 @@ class CustomWeights(PlainResNetInference):
             weights (str, optional): Path to the model weights. Defaults to None.
             class_names (list[str]): List of class names for the classifier.
             device (str, optional): Device for model inference. Defaults to "cpu".
+            num_layers (int, optional): ResNet depth to load. Defaults to 50.
         """
         self.CLASS_NAMES = class_names
         self.num_cls = len(self.CLASS_NAMES)
         super(CustomWeights, self).__init__(weights=weights, device=device,
-                                                   num_cls=self.num_cls, num_layers=50, url=None)
+                                                   num_cls=self.num_cls, num_layers=num_layers, url=None)
 
     def results_generation(self, logits: torch.Tensor, img_ids: list[str], id_strip: str = None) -> list[dict]:
         """
