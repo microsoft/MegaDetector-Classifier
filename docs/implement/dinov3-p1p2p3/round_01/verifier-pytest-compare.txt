@@ -1,0 +1,11 @@
+=== raw diff excluding verification header ===
+--- /dev/fd/63	2026-06-02 02:57:11.396337022 +0000
++++ /shared/home/aahernandez/MegaDetector-Classifier/docs/implement/dinov3-p1p2p3/round_01/verifier-pytest.txt	2026-06-02 02:56:55.730356145 +0000
+@@ -34,4 +34,4 @@
+ tests/unit/test_mixup.py::test_noise_type_modes_preserve_shape_and_dtype PASSED [ 96%]
+ tests/unit/test_mixup.py::test_naive_and_efficient_implementations_are_equivalent PASSED [100%]
+ 
+-====================== 26 passed, 2 deselected in 21.93s =======================
++====================== 26 passed, 2 deselected in 12.38s =======================
+
+=== normalized diff (elapsed time masked) ===

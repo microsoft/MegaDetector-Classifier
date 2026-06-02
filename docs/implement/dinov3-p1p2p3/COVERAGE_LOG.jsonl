@@ -1,0 +1,6 @@
+{"round":1,"agent":"coder-p1","file":"p1-bugfix","action":"fixed","commit":"19f87baa66879571695dace0a3412343b54047ee","signature":"num_layers: int = 50","report_anchor":"coder-p1_report.md#p1-bugfix"}
+{"round":1,"agent":"coder-p2","file":"p2-mixup","action":"fixed","commit":"a332e19794fcde3284711cf6b5ae96c8a162c125","signature":"efficient_batch_same_class_mixup","report_anchor":"coder-p2_report.md#p2-mixup"}
+{"round":1,"agent":"coder-p3","file":"p3-deps-and-customcrop","action":"fixed","commit":"2bd85389ab7806ea9ed646212df82a7c3fe03b10","signature":"_build_data_transforms","report_anchor":"coder-p3_report.md#p3-deps-and-customcrop"}
+{"round":1,"agent":"inquisitor","file":"p1-bugfix","action":"verified","report_anchor":"round_01/inquisitor_review.md#p1-bugfix"}
+{"round":1,"agent":"inquisitor","file":"p2-mixup","action":"verified","report_anchor":"round_01/inquisitor_review.md#p2-mixup"}
+{"round":1,"agent":"inquisitor","file":"p3-deps-and-customcrop","action":"verified","report_anchor":"round_01/inquisitor_review.md#p3-deps-and-customcrop"}

@@ -1,0 +1,69 @@
+=== branch and head ===
+docs/dinov3-integration-plan
+604c3b62decbf60d1a5125584f4508b70af8e0ce
+
+=== commit reachability ===
+19f87baa66879571695dace0a3412343b54047ee reachable
+a332e19794fcde3284711cf6b5ae96c8a162c125 reachable
+2bd85389ab7806ea9ed646212df82a7c3fe03b10 reachable
+
+=== signatures ===
+src/models/classification/resnet_base/custom_weights.py
+src/utils/mixup.py
+src/datasets/custom.py
+
+=== owned file logs ===
+--- src/models/classification/resnet_base/custom_weights.py
+19f87ba p1: CustomWeights num_layers kwarg + flip xfail (bug fix)
+--- tests/regression/test_customweights_num_layers.py
+19f87ba p1: CustomWeights num_layers kwarg + flip xfail (bug fix)
+--- src/utils/mixup.py
+a332e19 p2: port mixup utilities (noisy + efficient same-class) + 6 unit tests
+--- tests/unit/test_mixup.py
+a332e19 p2: port mixup utilities (noisy + efficient same-class) + 6 unit tests
+--- requirements.txt
+2bd8538 p3: optional deps file + Custom_Crop image_size kwarg + I11 hash update + 2 tests
+--- requirements-dinov3.txt
+2bd8538 p3: optional deps file + Custom_Crop image_size kwarg + I11 hash update + 2 tests
+--- src/datasets/custom.py
+2bd8538 p3: optional deps file + Custom_Crop image_size kwarg + I11 hash update + 2 tests
+--- tests/regression/test_invariants.py
+2bd8538 p3: optional deps file + Custom_Crop image_size kwarg + I11 hash update + 2 tests
+--- tests/regression/test_custom_crop_default_is_224.py
+2bd8538 p3: optional deps file + Custom_Crop image_size kwarg + I11 hash update + 2 tests
+--- tests/integration/test_dinov3_dataloader_emits_518.py
+2bd8538 p3: optional deps file + Custom_Crop image_size kwarg + I11 hash update + 2 tests
+
+=== I11 hash matches ===
+actual: 57a108435edd4889fa06a29dbc019050ab808e0dff4a22981b6185e2f40d65ee
+literal: 57a108435edd4889fa06a29dbc019050ab808e0dff4a22981b6185e2f40d65ee
+I11 MATCH
+
+=== I8/I9/I10 hashes unchanged diff ===
+-EXPECTED_CUSTOM_DATASET_SHA = "2e9888f9b3d60bc84d69269614edbf938f88614e4b77aaebce8e350e3c35e23b"
++EXPECTED_CUSTOM_DATASET_SHA = "57a108435edd4889fa06a29dbc019050ab808e0dff4a22981b6185e2f40d65ee"
+
+=== P1 xfail flip ===
+def test_customweights_loads_resnet18(tmp_path: Path) -> None:
+
+=== P3 requirements.txt diff ===
+diff --git a/requirements.txt b/requirements.txt
+index e18de22..e8e4022 100644
+--- a/requirements.txt
++++ b/requirements.txt
+@@ -8,3 +8,4 @@ wget
+ supervision
+ Pillow
+ tqdm
++# DINOv3 training/inference: pip install -r requirements-dinov3.txt
+
+=== P2 __init__.py diff ===
+
+=== coverage analysis ===
+p1-bugfix
+p2-mixup
+p3-deps-and-customcrop
+--- fixed entries ---
+{"round":1,"agent":"coder-p1","file":"p1-bugfix","action":"fixed","commit":"19f87baa66879571695dace0a3412343b54047ee","signature":"num_layers: int = 50","report_anchor":"coder-p1_report.md#p1-bugfix"}
+{"round":1,"agent":"coder-p2","file":"p2-mixup","action":"fixed","commit":"a332e19794fcde3284711cf6b5ae96c8a162c125","signature":"efficient_batch_same_class_mixup","report_anchor":"coder-p2_report.md#p2-mixup"}
+{"round":1,"agent":"coder-p3","file":"p3-deps-and-customcrop","action":"fixed","commit":"2bd85389ab7806ea9ed646212df82a7c3fe03b10","signature":"_build_data_transforms","report_anchor":"coder-p3_report.md#p3-deps-and-customcrop"}

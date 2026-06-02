@@ -1,0 +1,47 @@
+{
+  "skill": "implement",
+  "convergence_mode": "editing",
+  "created_round": 1,
+  "created_at": "2026-06-02T02:42:25Z",
+  "repo_root": "/shared/home/aahernandez/MegaDetector-Classifier",
+  "scope_items": [
+    {
+      "id": "p1-bugfix",
+      "type": "subtask",
+      "coder": "coder-p1",
+      "owned_files": [
+        "src/models/classification/resnet_base/custom_weights.py",
+        "tests/regression/test_customweights_num_layers.py"
+      ],
+      "description": "Phase 1: add num_layers defaulted kwarg to CustomWeights AND delete xfail marker from P0 test in a single commit",
+      "added_round": 1
+    },
+    {
+      "id": "p2-mixup",
+      "type": "subtask",
+      "coder": "coder-p2",
+      "owned_files": [
+        "src/utils/mixup.py",
+        "tests/unit/test_mixup.py"
+      ],
+      "description": "Phase 2: port noisy_same_class_mixup and efficient_batch_same_class_mixup from SINCHI repo; pure torch+numpy; do NOT edit src/utils/__init__.py",
+      "added_round": 1
+    },
+    {
+      "id": "p3-deps-and-customcrop",
+      "type": "subtask",
+      "coder": "coder-p3",
+      "owned_files": [
+        "requirements.txt",
+        "requirements-dinov3.txt",
+        "src/datasets/custom.py",
+        "tests/regression/test_invariants.py",
+        "tests/regression/test_custom_crop_default_is_224.py",
+        "tests/integration/test_dinov3_dataloader_emits_518.py"
+      ],
+      "description": "Phase 3: optional-deps wiring (requirements-dinov3.txt new; requirements.txt single comment line) + Custom_Crop image_size kwarg + update I11 hash in test_invariants.py + 2 new tests",
+      "added_round": 1
+    }
+  ],
+  "anti_narrowing_clause": "This ledger covers Phases 1, 2, and 3 of docs/design/dinov3-integration/final.md. Phases 0 (already converged) and 4-9 are explicitly out of scope. P1 is the only allowed edit to src/models/classification/resnet_base/custom_weights.py. P3 is the only allowed edit to src/datasets/custom.py, requirements.txt, and tests/regression/test_invariants.py (I11 hash update). P2 is purely additive (no edits to existing files). New in-scope subtasks may be APPENDED with added_round marker; existing entries may NEVER be removed."
+}
