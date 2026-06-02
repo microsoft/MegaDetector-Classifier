@@ -1,0 +1,37 @@
+warning: No `requires-python` value found in the workspace. Defaulting to `>=3.10`.
+============================= test session starts ==============================
+platform linux -- Python 3.10.12, pytest-8.4.2, pluggy-1.6.0 -- /shared/home/aahernandez/MegaDetector-Classifier/.venv/bin/python3
+cachedir: .pytest_cache
+rootdir: /shared/home/aahernandez/MegaDetector-Classifier
+configfile: pyproject.toml
+plugins: cov-7.1.0, anyio-4.13.0
+collecting ... collected 28 items / 2 deselected / 26 selected
+
+tests/integration/test_dinov3_dataloader_emits_518.py::test_build_data_transforms_emits_518_for_dinov3 PASSED [  3%]
+tests/regression/test_custom_crop_default_is_224.py::test_val_resize_is_224_by_default PASSED [  7%]
+tests/regression/test_custom_crop_default_is_224.py::test_train_random_resized_crop_is_224_by_default PASSED [ 11%]
+tests/regression/test_customweights_num_layers.py::test_customweights_loads_resnet18 PASSED [ 15%]
+tests/regression/test_customweights_num_layers.py::test_customweights_loads_resnet50 PASSED [ 19%]
+tests/regression/test_invariants.py::test_requirements_runtime_lines_hash PASSED [ 23%]
+tests/regression/test_invariants.py::test_default_config_yaml_equal PASSED [ 26%]
+tests/regression/test_invariants.py::test_plain_algorithm_class_identity PASSED [ 30%]
+tests/regression/test_invariants.py::test_plain_resnet_class_identity PASSED [ 34%]
+tests/regression/test_invariants.py::test_main_unchanged PASSED          [ 38%]
+tests/regression/test_invariants.py::test_plain_py_unchanged PASSED      [ 42%]
+tests/regression/test_invariants.py::test_plain_resnet_py_unchanged PASSED [ 46%]
+tests/regression/test_invariants.py::test_custom_dataset_byte_or_behaviour PASSED [ 50%]
+tests/regression/test_invariants.py::test_customweights_legacy_call_signature PASSED [ 53%]
+tests/regression/test_resnet_baseline_predictions.py::test_resnet_baseline_prediction[0] PASSED [ 57%]
+tests/regression/test_resnet_baseline_predictions.py::test_resnet_baseline_prediction[1] PASSED [ 61%]
+tests/regression/test_resnet_baseline_predictions.py::test_resnet_baseline_prediction[2] PASSED [ 65%]
+tests/regression/test_resnet_baseline_predictions.py::test_resnet_baseline_prediction[3] PASSED [ 69%]
+tests/regression/test_resnet_baseline_predictions.py::test_resnet_baseline_prediction[4] PASSED [ 73%]
+tests/regression/test_resnet_baseline_predictions.py::test_resnet_baseline_prediction[5] PASSED [ 76%]
+tests/unit/test_mixup.py::test_output_tensor_shape_preserved PASSED      [ 80%]
+tests/unit/test_mixup.py::test_label_preservation_when_all_same_class PASSED [ 84%]
+tests/unit/test_mixup.py::test_lambda_clamp_to_valid_range PASSED        [ 88%]
+tests/unit/test_mixup.py::test_singleton_class_edge_case PASSED          [ 92%]
+tests/unit/test_mixup.py::test_noise_type_modes_preserve_shape_and_dtype PASSED [ 96%]
+tests/unit/test_mixup.py::test_naive_and_efficient_implementations_are_equivalent PASSED [100%]
+
+====================== 26 passed, 2 deselected in 11.79s =======================

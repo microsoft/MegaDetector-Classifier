@@ -4,3 +4,6 @@
 {"round":1,"agent":"inquisitor","file":"p1-bugfix","action":"verified","report_anchor":"round_01/inquisitor_review.md#p1-bugfix"}
 {"round":1,"agent":"inquisitor","file":"p2-mixup","action":"verified","report_anchor":"round_01/inquisitor_review.md#p2-mixup"}
 {"round":1,"agent":"inquisitor","file":"p3-deps-and-customcrop","action":"verified","report_anchor":"round_01/inquisitor_review.md#p3-deps-and-customcrop"}
+{"round":2,"agent":"inquisitor","file":"p1-bugfix","action":"verified","report_anchor":"round_02/inquisitor_review.md#p1-bugfix"}
+{"round":2,"agent":"inquisitor","file":"p2-mixup","action":"verified","report_anchor":"round_02/inquisitor_review.md#p2-mixup"}
+{"round":2,"agent":"inquisitor","file":"p3-deps-and-customcrop","action":"verified","report_anchor":"round_02/inquisitor_review.md#p3-deps-and-customcrop"}
