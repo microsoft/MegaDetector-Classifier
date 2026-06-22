@@ -1,0 +1,13 @@
+{"round":1,"agent":"researcher","file":"target-architecture","action":"audited","report_anchor":"researcher-2_report.md#target-architecture"}
+{"round":1,"agent":"inquisitor","file":"source-pipeline","action":"verified","report_anchor":"round_01/inquisitor_review.md#source-pipeline"}
+{"round":1,"agent":"inquisitor","file":"target-architecture","action":"verified","report_anchor":"round_01/inquisitor_review.md#target-architecture"}
+{"round":1,"agent":"inquisitor","file":"prior-art-branch","action":"verified","report_anchor":"round_01/inquisitor_review.md#prior-art-branch"}
+{"round":1,"agent":"inquisitor","file":"dinov3-model-access","action":"verified","report_anchor":"round_01/inquisitor_review.md#dinov3-model-access"}
+{"round":1,"agent":"researcher","file":"source-pipeline","action":"audited","report_anchor":"researcher-1_report.md#source-pipeline"}
+{"round":1,"agent":"researcher","file":"dinov3-model-access","action":"audited","report_anchor":"researcher-4_report.md#dinov3-model-access"}
+{"round":1,"agent":"researcher","file":"prior-art-branch","action":"audited","report_anchor":"researcher-3_report.md#prior-art-branch"}
+{"round":2,"agent":"researcher","file":"source-pipeline","action":"audited","report_anchor":"round_02/researcher-1_report.md#source-pipeline"}
+{"round":2,"agent":"inquisitor","file":"source-pipeline","action":"verified","report_anchor":"round_02/inquisitor_review.md#source-pipeline"}
+{"round":2,"agent":"inquisitor","file":"target-architecture","action":"verified","report_anchor":"round_02/inquisitor_review.md#target-architecture"}
+{"round":2,"agent":"inquisitor","file":"prior-art-branch","action":"verified","report_anchor":"round_02/inquisitor_review.md#prior-art-branch"}
+{"round":2,"agent":"inquisitor","file":"dinov3-model-access","action":"verified","report_anchor":"round_02/inquisitor_review.md#dinov3-model-access"}

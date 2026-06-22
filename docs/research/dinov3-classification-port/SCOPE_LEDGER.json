@@ -1,0 +1,35 @@
+{
+  "skill": "research",
+  "convergence_mode": "read_only",
+  "topic": "Plan to port DINOv3 embedding extraction + linear-probing classification (all model sizes) from SINCHI_DINOV3 into MegaDetector-Classifier without breaking existing pipeline",
+  "created_round": 1,
+  "created_at": "2026-06-22T19:56:53Z",
+  "repo_root": "/shared/home/aahernandez/MegaDetector-Classifier",
+  "scope_items": [
+    {
+      "id": "source-pipeline",
+      "type": "sub-area",
+      "description": "SINCHI_DINOV3 feature inventory: embedding extraction scripts (extract_embeddings.py, extract_embeddings_all_models.py), linear-probe training (train.py, train_peft.py, validate.py), DINOv3LinearClassifier model wrapper, dataset/transforms, configs, the two-stage cached-embedding workflow, and exactly which files/functions/behaviors must be ported",
+      "added_round": 1
+    },
+    {
+      "id": "target-architecture",
+      "type": "sub-area",
+      "description": "MegaDetector-Classifier integration surface: PytorchWildlife-style BaseClassifierInference hierarchy, model families (resnet_base/timm_base/speciesnet_base/dinov3_base), datasets/transforms, main.py + algorithms training path, requirements/env, and the exact extension points plus what existing-pipeline behavior must not break",
+      "added_round": 1
+    },
+    {
+      "id": "prior-art-branch",
+      "type": "sub-area",
+      "description": "Reconcile with the docs/dinov3-integration-plan branch: inventory existing design (docs/design/dinov3-integration/final.md) and partial implementation (src/models/dinov3.py, src/algorithms/dinov3_linear.py, dinov3_base/*, requirements-dinov3.txt, tests P0-P5), what is done vs pending (Phase 8 SINCHI flavours), and how the port plan should reuse/merge/supersede it",
+      "added_round": 1
+    },
+    {
+      "id": "dinov3-model-access",
+      "type": "sub-area",
+      "description": "DINOv3 model variants and access: exact HuggingFace repo ids, embedding dims and image size for small-plus / base / huge-plus (dinov3-vits16plus, dinov3-vitb16, dinov3-vith16plus pretrain-lvd1689m), gated-access/license/huggingface-cli login requirements, transformers version needs, auto-download + availability-check mechanics, and what to document in the README",
+      "added_round": 1
+    }
+  ],
+  "anti_narrowing_clause": "This ledger is the convergence anchor. New in-scope items may be APPENDED with added_round marker, but no entry may be removed or ignored."
+}
