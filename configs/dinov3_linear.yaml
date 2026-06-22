@@ -1,0 +1,14 @@
+# Stage-2 DINOv3 cached-embedding linear-probe config.
+# This bypasses main.py and is separate from configs/config.yaml.
+model_size: base
+embeddings_dir: ./outputs/dinov3_embeddings
+train_csv: ./data/train.csv
+val_csv: ./data/val.csv
+num_classes: null
+epochs: 30
+lr: 0.001
+label_smoothing: 0.1
+batch_size: 256
+num_workers: 4
+output_dir: ./outputs/dinov3_linear
+image_size: 518
