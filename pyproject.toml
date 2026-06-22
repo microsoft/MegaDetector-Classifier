@@ -1,0 +1,17 @@
+[tool.pytest.ini_options]
+minversion = "7.0"
+testpaths = ["tests"]
+addopts = [
+    "-ra",
+    "--strict-markers",
+    "--strict-config",
+    "-m", "not slow and not isolated_env and not requires_hf and not gpu and not requires_dinov3",
+]
+markers = [
+    "slow: tests that take >10s; excluded by default",
+    "isolated_env: tests that spin up uv-isolated environments; excluded by default (run explicitly)",
+    "requires_hf: tests that require HF_TOKEN and network access; excluded by default",
+    "gpu: tests that require a CUDA GPU; excluded by default",
+    "requires_dinov3: tests that require requirements-dinov3.txt installed; excluded by default in baseline matrix",
+]
+tmp_path_retention_policy = "failed"

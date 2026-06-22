@@ -1,0 +1,82 @@
+{
+  "skill": "design",
+  "convergence_mode": "read_only",
+  "created_round": 1,
+  "created_at": "2026-06-01T18:05:03Z",
+  "repo_root": "/shared/home/aahernandez/MegaDetector-Classifier",
+  "scope_items": [
+    {
+      "id": "phase-decomposition",
+      "type": "subdomain",
+      "description": "Overall phase breakdown, ordering, dependencies, deliverables per phase, and entry/exit criteria for each phase",
+      "added_round": 1
+    },
+    {
+      "id": "mixup-utility-phase",
+      "type": "subdomain",
+      "description": "Phase porting noisy_same_class_mixup utility plus its unit tests",
+      "added_round": 1
+    },
+    {
+      "id": "model-and-algorithm-phase",
+      "type": "subdomain",
+      "description": "Phase adding DINOv3Classifier model + DINOv3Linear algorithm (frozen-backbone linear-probe path) plus unit and integration tests",
+      "added_round": 1
+    },
+    {
+      "id": "full-finetune-phase",
+      "type": "subdomain",
+      "description": "Phase enabling full-backbone fine-tune toggle (unfreeze + dual param groups) plus its tests",
+      "added_round": 1
+    },
+    {
+      "id": "peft-phase",
+      "type": "subdomain",
+      "description": "Phase adding LoRA/PiSSA support via peft wrapping plus checkpoint roundtrip tests",
+      "added_round": 1
+    },
+    {
+      "id": "inference-loader-phase",
+      "type": "subdomain",
+      "description": "Phase adding DINOv3CustomWeights with three-format auto-detect (MD-Cls .ckpt, SINCHI raw .pt, SINCHI PEFT .pt) plus inference roundtrip tests",
+      "added_round": 1
+    },
+    {
+      "id": "config-and-docs-phase",
+      "type": "subdomain",
+      "description": "Phase covering config.yaml additions, README updates, docs/usage.md additions, requirements.txt extras, all additive",
+      "added_round": 1
+    },
+    {
+      "id": "bug-fix-phase",
+      "type": "subdomain",
+      "description": "Fix CustomWeights num_layers=50 hardcode (latent bug from research report) plus regression test for ResNet-18 + ResNet-50 loading",
+      "added_round": 1
+    },
+    {
+      "id": "regression-protection",
+      "type": "subdomain",
+      "description": "Strategy for ensuring existing ResNet pipeline and existing CLI commands remain bit-identical (snapshot tests, hash checks, default-config invariants)",
+      "added_round": 1
+    },
+    {
+      "id": "test-strategy",
+      "type": "subdomain",
+      "description": "Overall test pyramid (unit / integration / regression / e2e) with which tests run per phase, what fixtures are needed, and what runs in CI vs local",
+      "added_round": 1
+    },
+    {
+      "id": "acceptance-and-validation",
+      "type": "subdomain",
+      "description": "End-to-end acceptance criteria mapped to research report's 10-item validation checklist, with concrete commands to execute and expected outputs",
+      "added_round": 1
+    },
+    {
+      "id": "risk-and-rollback",
+      "type": "subdomain",
+      "description": "Risk register per phase (HF auth, GPU memory, transformers/peft optional deps, breaking edits) and rollback procedure (per-phase git revert points)",
+      "added_round": 1
+    }
+  ],
+  "anti_narrowing_clause": "This ledger is the convergence anchor. New in-scope items may be APPENDED with added_round marker, but no entry may be removed or ignored."
+}
