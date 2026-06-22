@@ -81,3 +81,34 @@ class DINOv3Classifier(nn.Module):
         out = self.feature(pixel_values=x)
         feats = out.last_hidden_state[:, 0, :]
         return self.classifier(feats)
+
+    @staticmethod
+    def _cls_embedding_from_output(out) -> torch.Tensor:
+        if hasattr(out, "last_hidden_state") and out.last_hidden_state is not None:
+            return out.last_hidden_state[:, 0, :]
+        if hasattr(out, "pooler_output") and out.pooler_output is not None:
+            return out.pooler_output
+        if isinstance(out, dict):
+            if out.get("last_hidden_state") is not None:
+                return out["last_hidden_state"][:, 0, :]
+            if out.get("pooler_output") is not None:
+                return out["pooler_output"]
+        if isinstance(out, (tuple, list)) and out:
+            out = out[0]
+        if torch.is_tensor(out):
+            return out[:, 0, :] if out.ndim == 3 else out
+        raise TypeError(
+            "DINOv3 backbone output must expose last_hidden_state, "
+            "pooler_output, or a tensor/tuple tensor payload."
+        )
+
+    def get_embeddings(self, x: torch.Tensor) -> torch.Tensor:
+        """Return CLS-token embeddings from the frozen backbone."""
+        def _run_backbone() -> torch.Tensor:
+            out = self.feature(pixel_values=x)
+            return self._cls_embedding_from_output(out)
+
+        if self.training:
+            return _run_backbone()
+        with torch.no_grad():
+            return _run_backbone()
