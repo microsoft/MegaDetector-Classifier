@@ -6,17 +6,22 @@ from .base_classifier import *
 try:
     import importlib.util as _importlib_util
 
-    for _dinov3_dep in ("transformers", "huggingface_hub", "peft"):
+    for _dinov3_dep in ("transformers", "huggingface_hub"):
         if _importlib_util.find_spec(_dinov3_dep) is None:
             raise ModuleNotFoundError(
                 f"No module named {_dinov3_dep!r}", name=_dinov3_dep
             )
     from .dinov3_base import *  # noqa: F401,F403
 except ModuleNotFoundError as e:
-    if e.name not in {"transformers", "huggingface_hub", "peft"}:
+    if e.name not in {"transformers", "huggingface_hub"}:
         raise
 
-_DINOV3_NAMES = {"DINOv3CustomWeights", "DINOv3BaseInference"}
+_DINOV3_NAMES = {
+    "DINOv3AmazonRainforest",
+    "DINOv3BaseInference",
+    "DINOv3CustomWeights",
+    "DINOv3Transform",
+}
 
 
 def __getattr__(name):
