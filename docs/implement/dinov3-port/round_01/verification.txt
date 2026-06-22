@@ -1,0 +1,7 @@
+........................................................                 [100%]
+=============================== warnings summary ===============================
+tests/integration/test_dinov3_linear_probe.py::test_dinov3_linear_training_step_updates_classifier_only
+  /shared/home/aahernandez/MegaDetector-Classifier/.venv/lib/python3.10/site-packages/pytorch_lightning/core/module.py:451: You are trying to `self.log()` but the `self.trainer` reference is not registered on the model yet. This is most likely because the model hasn't been passed to the `Trainer`
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+56 passed, 3 deselected, 1 warning in 1782.50s (0:29:42)
