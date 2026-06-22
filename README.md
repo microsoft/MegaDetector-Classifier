@@ -201,3 +201,13 @@ You can also cite this software directly using the [`citation.cff`](citation.cff
 Issues, feature requests, and pull requests are welcome at [microsoft/MegaDetector-Classifier/issues](https://github.com/microsoft/MegaDetector-Classifier/issues).
 
 For framework-level changes (PyTorch-Wildlife API, models, datasets), see [microsoft/PytorchWildlife](https://github.com/microsoft/PytorchWildlife). For ecosystem-wide questions, see the [microsoft/Biodiversity](https://github.com/microsoft/Biodiversity) umbrella.
+
+## DINOv3 classification (experimental)
+
+DINOv3 classification is an optional experimental path for DINOv3 embedding extraction, two-stage linear-head training, and Amazon Rainforest inference. It requires the optional DINOv3 dependencies from `requirements-dinov3.txt`; the base MegaDetector-Classifier pipeline works without them.
+
+The DINOv3 backbones are gated Hugging Face models under Meta's DINOv3 License. Create a Hugging Face account, request access on the supported model pages, wait for approval, then authenticate with `hf auth login`, `huggingface-cli login`, or `HF_TOKEN`.
+
+Amazon DINOv3 weights are forthcoming on Zenodo (placeholder). Until then, pass a local checkpoint with `weights=<path>`. When published, the DINOv3 Amazon manifest will contain the Zenodo URLs and SHA256 hashes for auto-download.
+
+See [`docs/dinov3.md`](docs/dinov3.md) for installation, gated-access steps, model sizes, inference examples, two-stage commands, and troubleshooting.
