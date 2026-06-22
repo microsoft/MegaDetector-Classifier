@@ -2,3 +2,11 @@
 {"round":1,"agent":"coder-4","file":"docs","action":"fixed","commit":"63e0a5c7224d0c34ebafb6daf0f1447cf2cfe9bc","signature":"DINOv3 classification (experimental)","report_anchor":"coder-4_report.md#docs"}
 {"round":1,"agent":"coder-3","file":"two-stage","action":"fixed","commit":"ba7b1085b3f616393b0d103aa1e2458c19afb4b2","signature":"DINOv3EmbeddingDataset","report_anchor":"coder-3_report.md#two-stage"}
 {"round":1,"agent":"coder-2","file":"inference-core","action":"fixed","commit":"121c6e9e48c7fafb9c4723bdcbf809133946275d","signature":"DINOv3AmazonRainforest","report_anchor":"coder-2_report.md#inference-core"}
+{"round":1,"agent":"inquisitor","file":"deps-access","action":"verified","report_anchor":"round_01/inquisitor_review.md#deps-access"}
+{"round":1,"agent":"inquisitor","file":"inference-core","action":"verified","report_anchor":"round_01/inquisitor_review.md#inference-core"}
+{"round":1,"agent":"inquisitor","file":"two-stage","action":"verified","report_anchor":"round_01/inquisitor_review.md#two-stage"}
+{"round":1,"agent":"inquisitor","file":"docs","action":"verified","report_anchor":"round_01/inquisitor_review.md#docs"}
+{"round":2,"agent":"inquisitor","file":"deps-access","action":"verified","report_anchor":"round_02/inquisitor_review.md#deps-access"}
+{"round":2,"agent":"inquisitor","file":"inference-core","action":"verified","report_anchor":"round_02/inquisitor_review.md#inference-core"}
+{"round":2,"agent":"inquisitor","file":"two-stage","action":"verified","report_anchor":"round_02/inquisitor_review.md#two-stage"}
+{"round":2,"agent":"inquisitor","file":"docs","action":"verified","report_anchor":"round_02/inquisitor_review.md#docs"}

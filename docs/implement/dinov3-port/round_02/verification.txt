@@ -1,0 +1,5 @@
+Round 2: NO fixer-coders ran (all 4 subtasks were complete + green in round 1).
+No source files changed since round 1 (HEAD unchanged except docs/implement artifacts).
+Therefore the round-1 authoritative test result remains valid:
+  56 passed, 3 deselected, 1 warning, 0 failed (see round_01/verification.txt).
+Re-running the full ~30-min suite would import an unchanged tree and yield the same result.
