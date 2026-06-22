@@ -4,7 +4,7 @@ PEFT and full-FT are explicit NotImplementedError stubs landing in Phase 6/7.
 """
 from __future__ import annotations
 
-from typing import Any, Optional
+from typing import Any, Optional, Sequence
 
 import pytorch_lightning as pl
 import torch
@@ -13,7 +13,7 @@ import torch.nn as nn
 from src import models as _models
 from src.utils.mixup import efficient_batch_same_class_mixup, noisy_same_class_mixup
 
-__all__ = ["DINOv3Linear"]
+__all__ = ["DINOv3Linear", "DINOv3LinearProbe"]
 
 
 class DINOv3Linear(pl.LightningModule):
@@ -108,3 +108,82 @@ class DINOv3Linear(pl.LightningModule):
     def _wrap_with_peft(self, peft_config):
         """Stub. Real implementation lands in Phase 7."""
         raise NotImplementedError("PEFT lands in Phase 7")
+
+
+class DINOv3LinearProbe(pl.LightningModule):
+    """Linear probe trained directly on cached DINOv3 embeddings."""
+
+    def __init__(
+        self,
+        embedding_dim: int,
+        num_classes: int,
+        lr: float = 1e-3,
+        label_smoothing: float = 0.1,
+        class_names: Optional[Sequence[str]] = None,
+        model_name: Optional[str] = None,
+        model_size: Optional[str] = None,
+        image_size: int = 518,
+    ):
+        super().__init__()
+        self.embedding_dim = int(embedding_dim)
+        self.num_classes = int(num_classes)
+        self.lr = float(lr)
+        self.label_smoothing = float(label_smoothing)
+        self.model_name = model_name
+        self.model_size = model_size
+        self.image_size = int(image_size)
+        self.class_names = (
+            list(class_names)
+            if class_names is not None
+            else [str(idx) for idx in range(self.num_classes)]
+        )
+        if len(self.class_names) != self.num_classes:
+            raise ValueError(
+                f"class_names length ({len(self.class_names)}) must match num_classes ({self.num_classes})"
+            )
+
+        self.head = nn.Linear(self.embedding_dim, self.num_classes)
+        self.criterion = nn.CrossEntropyLoss(label_smoothing=self.label_smoothing)
+        self.save_hyperparameters()
+
+    def forward(self, embeddings: torch.Tensor) -> torch.Tensor:
+        return self.head(embeddings.float())
+
+    def training_step(self, batch, batch_idx):
+        embeddings, labels = batch[0], batch[1]
+        logits = self(embeddings)
+        loss = self.criterion(logits, labels)
+        preds = logits.argmax(dim=1)
+        acc = (preds == labels).float().mean()
+        self.log("train_loss", loss, prog_bar=True, on_step=False, on_epoch=True)
+        self.log("train_acc", acc, prog_bar=True, on_step=False, on_epoch=True)
+        return loss
+
+    def validation_step(self, batch, batch_idx):
+        embeddings, labels = batch[0], batch[1]
+        logits = self(embeddings)
+        loss = self.criterion(logits, labels)
+        preds = logits.argmax(dim=1)
+        acc = (preds == labels).float().mean()
+        self.log("val_loss", loss, prog_bar=True, on_step=False, on_epoch=True)
+        self.log("val_acc", acc, prog_bar=True, on_step=False, on_epoch=True)
+        return loss
+
+    def configure_optimizers(self):
+        return torch.optim.AdamW(self.parameters(), lr=self.lr)
+
+    def export_classifier_only(self) -> dict:
+        """Export the stage-2 flavour-D classifier-only checkpoint."""
+        return {
+            "format": "dinov3_classifier_only",
+            "version": 1,
+            "model_name": self.model_name,
+            "model_size": self.model_size,
+            "embedding_dim": self.embedding_dim,
+            "num_classes": self.num_classes,
+            "image_size": self.image_size,
+            "feature_type": "cls",
+            "class_names": list(self.class_names),
+            "classifier.weight": self.head.weight.detach().cpu().clone(),
+            "classifier.bias": self.head.bias.detach().cpu().clone(),
+        }
