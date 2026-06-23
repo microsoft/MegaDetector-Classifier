@@ -180,6 +180,8 @@ class DINOv3LinearProbe(pl.LightningModule):
 
     def export_classifier_only(self) -> dict:
         """Export the stage-2 flavour-D classifier-only checkpoint."""
+        if not self.model_name:
+            raise ValueError("model_name is required to export a DINOv3 classifier-only checkpoint")
         return {
             "format": "dinov3_classifier_only",
             "version": 1,
@@ -188,6 +190,8 @@ class DINOv3LinearProbe(pl.LightningModule):
             "embedding_dim": self.embedding_dim,
             "num_classes": self.num_classes,
             "image_size": self.image_size,
+            "transform": "dinov3_bicubic_518_imagenet",
+            "transform_version": 1,
             "feature_type": "cls",
             "class_names": list(self.class_names),
             "classifier.weight": self.head.weight.detach().cpu().clone(),

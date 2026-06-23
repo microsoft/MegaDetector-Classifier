@@ -58,6 +58,22 @@ def _label_index(row: pd.Series, label_col: str, label_to_idx: Dict[object, int]
     return -1
 
 
+def _verify_existing_embedding(embedding_path: Path, image_path: str) -> None:
+    with embedding_path.open("rb") as handle:
+        payload = pickle.load(handle)
+    if not isinstance(payload, dict) or "image_path" not in payload:
+        raise ValueError(
+            f"Cannot resume-skip {embedding_path}: existing cache lacks image_path metadata"
+        )
+    cached_image_path = str(payload["image_path"])
+    if cached_image_path != image_path:
+        raise ValueError(
+            "Embedding cache collision: "
+            f"{embedding_path} already stores image_path={cached_image_path!r}, "
+            f"current row has image_path={image_path!r}"
+        )
+
+
 def _rows_for_split(df: pd.DataFrame, split: str) -> pd.DataFrame:
     column = _split_column(df)
     if column is None:
@@ -166,6 +182,8 @@ def main() -> None:
         )
 
         stats = {"total": 0, "saved": 0, "skipped": 0}
+        seen_targets: Dict[Path, str] = {}
+        manifest_rows: List[Dict[str, object]] = []
         split_start = time.time()
         with torch.inference_mode():
             for images, labels, image_paths in loader:
@@ -173,20 +191,41 @@ def main() -> None:
                 embeddings = model.get_embeddings(images)
                 for idx, image_path in enumerate(image_paths):
                     stats["total"] += 1
+                    image_path = str(image_path)
                     embedding_path = split_dir / f"{safe_name(image_path)}.pkl"
+                    previous_image_path = seen_targets.get(embedding_path)
+                    if previous_image_path is not None and previous_image_path != image_path:
+                        raise ValueError(
+                            "Embedding cache collision within split "
+                            f"{split!r}: {previous_image_path!r} and {image_path!r} "
+                            f"both map to {embedding_path}"
+                        )
+                    seen_targets[embedding_path] = image_path
+                    label = int(labels[idx].item() if hasattr(labels[idx], "item") else labels[idx])
                     if embedding_path.exists():
+                        _verify_existing_embedding(embedding_path, image_path)
+                        manifest_rows.append(
+                            {"image_path": image_path, "pkl_path": str(embedding_path), "label": label}
+                        )
                         stats["skipped"] += 1
                         continue
                     embedding = embeddings[idx].detach().cpu().to(dtype=torch.float32).numpy()
                     payload = {
                         "embedding": embedding,
-                        "label": int(labels[idx].item() if hasattr(labels[idx], "item") else labels[idx]),
-                        "image_path": str(image_path),
+                        "label": label,
+                        "image_path": image_path,
                     }
                     with embedding_path.open("wb") as handle:
                         pickle.dump(payload, handle)
+                    manifest_rows.append(
+                        {"image_path": image_path, "pkl_path": str(embedding_path), "label": label}
+                    )
                     stats["saved"] += 1
 
+        pd.DataFrame(manifest_rows, columns=["image_path", "pkl_path", "label"]).to_csv(
+            split_dir / "manifest.csv",
+            index=False,
+        )
         timings[split] = time.time() - split_start
         print(
             f"{split}: total={stats['total']} saved={stats['saved']} skipped={stats['skipped']} "

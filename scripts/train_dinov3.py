@@ -22,11 +22,9 @@ def _load_config(path: str | Path) -> Dict[str, Any]:
     return data
 
 
-def _class_names_from_dataset(dataset, num_classes: int) -> List[str]:
-    names = list(dataset.get_class_names())
-    if len(names) < num_classes:
-        names.extend(str(index) for index in range(len(names), num_classes))
-    return names[:num_classes]
+def _class_names_from_label_mapping(label_to_idx: Dict[Any, int], num_classes: int) -> List[str]:
+    idx_to_label = {int(idx): label for label, idx in label_to_idx.items()}
+    return [str(idx_to_label.get(index, index)) for index in range(num_classes)]
 
 
 def main() -> None:
@@ -51,7 +49,16 @@ def main() -> None:
     photo_col = config.get("photo_col", "Photo_ID")
     label_col = config.get("label_col", "Label")
 
-    label_to_idx = build_label_mapping(train_csv, label_col=label_col)
+    train_label_to_idx = build_label_mapping(train_csv, label_col=label_col)
+    val_label_to_idx = build_label_mapping(val_csv, label_col=label_col)
+    labels: List[Any] = []
+    for mapping in (train_label_to_idx, val_label_to_idx):
+        for label in mapping:
+            if label not in labels:
+                labels.append(label)
+    labels = sorted(labels, key=lambda value: str(value))
+    label_to_idx = {label: idx for idx, label in enumerate(labels)}
+
     train_dataset = DINOv3EmbeddingDataset(
         embeddings_dir=embeddings_dir,
         csv_path=train_csv,
@@ -69,7 +76,7 @@ def main() -> None:
         label_col=label_col,
     )
 
-    inferred_num_classes = len(train_dataset.get_class_names())
+    inferred_num_classes = len(label_to_idx)
     configured_num_classes = config.get("num_classes")
     num_classes = int(configured_num_classes) if configured_num_classes is not None else inferred_num_classes
     if num_classes < inferred_num_classes:
@@ -101,7 +108,7 @@ def main() -> None:
         num_classes=num_classes,
         lr=float(config.get("lr", 1e-3)),
         label_smoothing=float(config.get("label_smoothing", 0.1)),
-        class_names=_class_names_from_dataset(train_dataset, num_classes),
+        class_names=_class_names_from_label_mapping(label_to_idx, num_classes),
         model_name=resolve_model_id(model_size),
         model_size=model_size,
         image_size=int(config.get("image_size", 518)),
