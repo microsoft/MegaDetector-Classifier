@@ -1,0 +1,25 @@
+=== audit-fix round 1 verification ===
+date(restart2): 2026-06-23T02:51:49Z
+HEAD: 9829e74
+note: prior runs stalled on NFS temp I/O (~/.local/tmp). Re-run with basetemp+TMPDIR on /dev/shm tmpfs.
+
+########## FULL PYTEST SUITE ##########
+warning: No `requires-python` value found in the workspace. Defaulting to `>=3.10`.
+........................................................                 [100%]
+=============================== warnings summary ===============================
+tests/integration/test_dinov3_linear_probe.py::test_dinov3_linear_training_step_updates_classifier_only
+  /shared/home/aahernandez/MegaDetector-Classifier/.venv/lib/python3.10/site-packages/pytorch_lightning/core/module.py:451: You are trying to `self.log()` but the `self.trainer` reference is not registered on the model yet. This is most likely because the model hasn't been passed to the `Trainer`
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+56 passed, 3 deselected, 1 warning in 305.41s (0:05:05)
+PYTEST_EXIT=0
+########## LINT ##########
+No Python linter (ruff/flake8/black/pylint) is configured in this repo.
+requirements-dev.txt = pytest, pytest-cov, pyyaml only; pyproject has no [tool.ruff].
+Per skill policy ("only run linters that already exist"), lint gate = N/A.
+Verification gate for audit-fix = full pytest suite (see verification.txt).
+
+########## SUMMARY ##########
+RESULT: ALL CLEAN — 56 passed, 3 deselected, 0 failed (== baseline). No regressions.
+Lint: N/A (no linter configured in repo).
+Category: clean (no NEW-FAILURE, no REGRESSION).

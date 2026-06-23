@@ -1,0 +1,5 @@
+########## LINT ##########
+No Python linter (ruff/flake8/black/pylint) is configured in this repo.
+requirements-dev.txt = pytest, pytest-cov, pyyaml only; pyproject has no [tool.ruff].
+Per skill policy ("only run linters that already exist"), lint gate = N/A.
+Verification gate for audit-fix = full pytest suite (see verification.txt).
