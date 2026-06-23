@@ -84,22 +84,26 @@ class DINOv3Classifier(nn.Module):
 
     @staticmethod
     def _cls_embedding_from_output(out) -> torch.Tensor:
+        last_hidden_state = None
         if hasattr(out, "last_hidden_state") and out.last_hidden_state is not None:
-            return out.last_hidden_state[:, 0, :]
-        if hasattr(out, "pooler_output") and out.pooler_output is not None:
-            return out.pooler_output
-        if isinstance(out, dict):
-            if out.get("last_hidden_state") is not None:
-                return out["last_hidden_state"][:, 0, :]
-            if out.get("pooler_output") is not None:
-                return out["pooler_output"]
-        if isinstance(out, (tuple, list)) and out:
-            out = out[0]
-        if torch.is_tensor(out):
-            return out[:, 0, :] if out.ndim == 3 else out
+            last_hidden_state = out.last_hidden_state
+        elif isinstance(out, dict) and out.get("last_hidden_state") is not None:
+            last_hidden_state = out["last_hidden_state"]
+        elif isinstance(out, (tuple, list)) and out:
+            candidate = out[0]
+            if hasattr(candidate, "last_hidden_state") and candidate.last_hidden_state is not None:
+                last_hidden_state = candidate.last_hidden_state
+            elif isinstance(candidate, dict) and candidate.get("last_hidden_state") is not None:
+                last_hidden_state = candidate["last_hidden_state"]
+            elif torch.is_tensor(candidate):
+                last_hidden_state = candidate
+        elif torch.is_tensor(out):
+            last_hidden_state = out
+        if torch.is_tensor(last_hidden_state) and last_hidden_state.ndim == 3:
+            return last_hidden_state[:, 0, :]
         raise TypeError(
-            "DINOv3 backbone output must expose last_hidden_state, "
-            "pooler_output, or a tensor/tuple tensor payload."
+            "DINOv3 backbone output must expose a 3-D last_hidden_state tensor "
+            "so CLS embeddings are taken from token index 0."
         )
 
     def get_embeddings(self, x: torch.Tensor) -> torch.Tensor:

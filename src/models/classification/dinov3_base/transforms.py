@@ -2,7 +2,9 @@
 from __future__ import annotations
 
 import torch
+from PIL import Image
 from torchvision import transforms
+from torchvision.transforms import functional as TF
 from torchvision.transforms import InterpolationMode
 
 __all__ = ["DINOv3Transform"]
@@ -26,4 +28,8 @@ class DINOv3Transform:
         ])
 
     def __call__(self, img) -> torch.Tensor:
+        if isinstance(img, Image.Image):
+            img = img.convert("RGB")
+        else:
+            img = TF.to_pil_image(img).convert("RGB")
         return self.trans(img)
