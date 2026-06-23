@@ -73,6 +73,8 @@ nav:
     - Overview: index.md
     - Installation: installation.md
     - Usage Guide: usage.md
+    - DINOv3 Classification: dinov3.md
+    - DINOv3 Fine-tuning (experimental): dinov3_experimental.md
     - Tags: tags.md
   - Cite Us: cite.md
   - Developer Guide: build_mkdocs.md
