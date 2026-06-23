@@ -1,6 +1,12 @@
-"""DINOv3 linear-probe Lightning algorithm (Phase 4 MVP).
+"""DINOv3 linear-probe Lightning algorithms.
 
-PEFT and full-FT are explicit NotImplementedError stubs landing in Phase 6/7.
+This module hosts two distinct probes:
+
+- ``DINOv3Linear``: an image-based linear probe over a live DINOv3 backbone
+  (Phase 4 MVP). PEFT and full-FT are explicit NotImplementedError stubs
+  landing in Phase 6/7.
+- ``DINOv3LinearProbe``: a linear head trained directly on cached DINOv3
+  embeddings (Phase 5); this is the class used by ``scripts/train_dinov3.py``.
 """
 from __future__ import annotations
 
@@ -11,9 +17,18 @@ import torch
 import torch.nn as nn
 
 from src import models as _models
-from src.utils.mixup import efficient_batch_same_class_mixup, noisy_same_class_mixup
+from src.utils.mixup import noisy_same_class_mixup
 
 __all__ = ["DINOv3Linear", "DINOv3LinearProbe"]
+
+
+def _conf_get(obj: Any, key: str, default: Any = None) -> Any:
+    """Read ``key`` from a mapping-or-namespace config object.
+
+    Uses ``.get`` for mappings (``dict``/Munch) and falls back to ``getattr``
+    for plain namespaces, returning ``default`` when the key is absent.
+    """
+    return obj.get(key, default) if hasattr(obj, "get") else getattr(obj, key, default)
 
 
 class DINOv3Linear(pl.LightningModule):
@@ -36,18 +51,13 @@ class DINOv3Linear(pl.LightningModule):
         self.train_class_counts = train_class_counts
         self.id_to_labels = id_to_labels
 
-        dinov3_cfg = conf.get("dinov3", {}) if hasattr(conf, "get") else getattr(conf, "dinov3", {})
+        dinov3_cfg = _conf_get(conf, "dinov3", {})
 
         def _cfg(key, default=None):
-            if isinstance(dinov3_cfg, dict):
-                return dinov3_cfg.get(key, default)
-            return getattr(dinov3_cfg, key, default)
+            return _conf_get(dinov3_cfg, key, default)
 
         peft_cfg = _cfg("peft", {}) or {}
-        if isinstance(peft_cfg, dict):
-            peft_enabled = peft_cfg.get("enable", False)
-        else:
-            peft_enabled = getattr(peft_cfg, "enable", False)
+        peft_enabled = _conf_get(peft_cfg, "enable", False)
         if peft_enabled:
             self._wrap_with_peft(peft_cfg)
 
@@ -98,11 +108,7 @@ class DINOv3Linear(pl.LightningModule):
 
     def configure_optimizers(self):
         trainable = [p for p in self.parameters() if p.requires_grad]
-        lr = (
-            getattr(self.conf, "lr_classifier", 1e-3)
-            if hasattr(self.conf, "lr_classifier")
-            else (self.conf.get("lr_classifier", 1e-3) if isinstance(self.conf, dict) else 1e-3)
-        )
+        lr = _conf_get(self.conf, "lr_classifier", 1e-3)
         return torch.optim.AdamW(trainable, lr=lr)
 
     def _wrap_with_peft(self, peft_config):

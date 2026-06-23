@@ -6,9 +6,8 @@ import pickle
 import time
 from datetime import timedelta
 from pathlib import Path
-from typing import Dict, Iterable, List, Optional
+from typing import Dict, List, Optional
 
-import numpy as np
 import pandas as pd
 from PIL import Image
 
@@ -180,7 +179,7 @@ def main() -> None:
                         continue
                     embedding = embeddings[idx].detach().cpu().to(dtype=torch.float32).numpy()
                     payload = {
-                        "embedding": np.asarray(embedding, dtype=np.float32),
+                        "embedding": embedding,
                         "label": int(labels[idx].item() if hasattr(labels[idx], "item") else labels[idx]),
                         "image_path": str(image_path),
                     }
