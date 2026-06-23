@@ -1,0 +1,8 @@
+=== doc-fix round 1 verification ===
+date: 2026-06-23T01:58:34Z   HEAD: 3244405
+
+########## relative .md link check (ledger docs) ##########
+(no BROKEN lines above = all relative .md links resolve)
+
+########## markdownlint ##########
+markdownlint not installed — skipped (N/A)

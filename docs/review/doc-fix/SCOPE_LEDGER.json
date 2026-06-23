@@ -1,0 +1,60 @@
+{
+  "skill": "doc-fix",
+  "convergence_mode": "editing",
+  "created_round": 1,
+  "created_at": "2026-06-23T00:40:37Z",
+  "repo_root": "/shared/home/aahernandez/MegaDetector-Classifier",
+  "files": [
+    {
+      "path": "README.md",
+      "categories": [],
+      "added_round": 1
+    },
+    {
+      "path": "SECURITY.md",
+      "categories": [],
+      "added_round": 1
+    },
+    {
+      "path": "docs/index.md",
+      "categories": [],
+      "added_round": 1
+    },
+    {
+      "path": "docs/installation.md",
+      "categories": [],
+      "added_round": 1
+    },
+    {
+      "path": "docs/usage.md",
+      "categories": [],
+      "added_round": 1
+    },
+    {
+      "path": "docs/tags.md",
+      "categories": [],
+      "added_round": 1
+    },
+    {
+      "path": "docs/cite.md",
+      "categories": [],
+      "added_round": 1
+    },
+    {
+      "path": "docs/build_mkdocs.md",
+      "categories": [],
+      "added_round": 1
+    },
+    {
+      "path": "docs/dinov3.md",
+      "categories": [],
+      "added_round": 1
+    },
+    {
+      "path": "docs/dinov3_experimental.md",
+      "categories": [],
+      "added_round": 1
+    }
+  ],
+  "anti_narrowing_clause": "Doc-fix scope ledger. Files may be APPENDED with added_round; never removed."
+}
