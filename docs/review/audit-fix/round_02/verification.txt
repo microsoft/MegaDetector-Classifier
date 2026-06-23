@@ -1,0 +1,19 @@
+=== audit-fix round 2 verification ===
+date: 2026-06-23T03:47:53Z
+HEAD: 96e4a38
+note: TMPDIR+basetemp on /dev/shm tmpfs (avoids NFS temp-I/O stalls).
+
+########## FULL PYTEST SUITE ##########
+warning: No `requires-python` value found in the workspace. Defaulting to `>=3.10`.
+........................................................                 [100%]
+=============================== warnings summary ===============================
+tests/integration/test_dinov3_linear_probe.py::test_dinov3_linear_training_step_updates_classifier_only
+  /shared/home/aahernandez/MegaDetector-Classifier/.venv/lib/python3.10/site-packages/pytorch_lightning/core/module.py:451: You are trying to `self.log()` but the `self.trainer` reference is not registered on the model yet. This is most likely because the model hasn't been passed to the `Trainer`
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+56 passed, 3 deselected, 1 warning in 395.43s (0:06:35)
+PYTEST_EXIT=0
+
+########## SUMMARY ##########
+RESULT: ALL CLEAN — 56 passed, 3 deselected, 0 failed (== baseline). No regressions.
+Lint: N/A (no linter configured). 3 behavioral fixes applied this round.
