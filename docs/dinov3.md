@@ -6,6 +6,8 @@ DINOv3 classification is an experimental, optional feature for extracting DINOv3
 
 DINOv3 backbone weights are hosted on Hugging Face behind Meta's DINOv3 License gate. The Amazon DINOv3 classifier heads are separate checkpoints and are not published yet; see the Zenodo placeholder in the inference section.
 
+For GPU-memory guidance and experimental `main.py`-based training notes, see [`docs/dinov3_experimental.md`](dinov3_experimental.md).
+
 ## 2. Installation
 
 Install the optional DINOv3 dependency set only when you need DINOv3 extraction, training, or inference:
@@ -91,6 +93,8 @@ Stage 1: extract embeddings.
 python scripts/extract_embeddings.py --model-size base --csv <annotations.csv> --root <image_root> --out <embeddings_dir> --split both
 ```
 
+The stage-1 CSV must provide an image-path column `Photo_ID` and a class-name column `Label` (the stage-2 config can override these via `photo_col`/`label_col`). These differ from the base pipeline's `path`/`classification`/`label` columns. The `--split` flag reads a split column named one of `split`, `Split`, `dataset`, `Dataset`, `subset`, or `Subset`.
+
 Stage 2: train the DINOv3 linear head.
 
 ```bash
@@ -98,6 +102,8 @@ python scripts/train_dinov3.py --config configs/dinov3_linear.yaml
 ```
 
 Use `--model-size small_plus`, `--model-size base`, or `--model-size huge_plus` in stage 1 to choose the backbone size. Stage 2 uses the config file to locate cached embeddings and write the classifier checkpoint.
+
+Stage 2 writes a classifier-only (flavour D) checkpoint to `<output_dir>/best_model.pt`. Key `configs/dinov3_linear.yaml` fields: `model_size`, `embeddings_dir`, `train_csv`, `val_csv`, `output_dir`, `epochs`, `lr`, and `batch_size`.
 
 ## 7. Troubleshooting
 

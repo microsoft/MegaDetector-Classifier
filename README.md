@@ -139,6 +139,7 @@ Available loaders:
 - `DeepfauneClassifier` — Deepfaune ViT-L/14 DINOv2 classifier (timm backbone)
 - `DFNE` — DFNE ViT-L/14 DINOv2 classifier (timm backbone)
 - `SpeciesNetTFInference` — SpeciesNet TensorFlow classifier (optional, see below)
+- `DINOv3AmazonRainforest` — Amazon Rainforest DINOv3 classifier (optional, experimental; currently needs a local checkpoint via `weights=<path>` until the Zenodo weights publish — see [DINOv3 classification (experimental)](#dinov3-classification-experimental))
 
 ### Optional: SpeciesNet
 
@@ -173,7 +174,8 @@ MegaDetector-Classifier/
     │       ├── base_classifier.py
     │       ├── resnet_base/         # AI4GAmazon, AI4GOpossum, Serengeti, CustomWeights
     │       ├── timm_base/           # DeepfauneClassifier, DFNE
-    │       └── speciesnet_base/     # SpeciesNetTFInference (optional)
+    │       ├── speciesnet_base/     # SpeciesNetTFInference (optional)
+    │       └── dinov3_base/         # DINOv3 inference (optional, experimental)
     └── utils/
         ├── batch_detection_cropping.py   # MegaDetector crop integration
         ├── data_splitting.py             # Random / location / sequence splits

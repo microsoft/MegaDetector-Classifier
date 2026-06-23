@@ -1,8 +1,8 @@
-# DINOv3 fine-tuning (experimental — Phase 5 MVP)
+# DINOv3 fine-tuning notes (experimental)
 
-> Status: EXPERIMENTAL. Frozen-backbone linear-probe only.
-> Full fine-tune lands in Phase 6; PEFT/LoRA in Phase 7; SINCHI ckpts in Phase 8.
-> Full docs land in Phase 9.
+> Status: EXPERIMENTAL. Supplementary notes for the `main.py`-routable
+> `DINOv3Linear` linear-probe path. See [`docs/dinov3.md`](dinov3.md) for the
+> canonical DINOv3 install, gated-access, inference, and two-stage workflow guide.
 
 ## Install
 
@@ -31,27 +31,43 @@ export TRANSFORMERS_OFFLINE=1
 ## GPU memory
 
 ViT-S (recommended for first attempts) fits on ~6 GB of VRAM at
-`batch_size=32, image_size=518`. Larger backbones (ViT-B, ViT-L) need
-proportionally more memory. Full memory table lands in `docs/dinov3.md` (P9).
+`batch_size=32, image_size=518`. Larger ViT backbones (e.g. ViT-B, ViT-L,
+ViT-H+) need proportionally more VRAM, so reduce `batch_size` accordingly.
+These size names describe the `main.py`-routable `DINOv3Linear` path, which
+accepts any DINOv3 Hugging Face repo id; the two-stage scripts
+(`scripts/extract_embeddings.py`) accept only `small_plus`, `base`, and
+`huge_plus` — see [`docs/dinov3.md`](dinov3.md).
 
 ## Image size
 
-DINOv3 backbones expect 518×518 input. Use `Custom_Crop(image_size=518)`
+DINOv3 backbones expect 518×518 input. Use `Custom_Crop(conf, image_size=518)`
 or set `image_size: 518` in your YAML config.
 
-## Scope (P5 MVP)
+## Scope
 
-This phase ships:
+Implemented and supported today:
 
-- `DINOv3Classifier` (frozen backbone) and `DINOv3Linear` (linear-probe training).
-- `DINOv3CustomWeights` to reload a `.ckpt` trained by this repo. Load
-  `.ckpt` files only from trusted sources; v1 uses `torch.load(weights_only=False)`.
-- Lazy optional-deps surface: `from src.models import classification` works without
-  DINOv3 deps installed; `classification.DINOv3CustomWeights` raises an
+- `DINOv3Classifier` (frozen backbone) and `DINOv3Linear` (linear-probe
+  training, routable via `main.py`).
+- DINOv3 inference surface: `DINOv3AmazonRainforest`, `DINOv3BaseInference`, and
+  `batch_image_classification_with_embeddings`.
+- SINCHI checkpoint loaders — flavours A–D in `_extract_state_dict`
+  (`src/models/classification/dinov3_base/base_classifier.py`).
+- `DINOv3CustomWeights` to load a local DINOv3 checkpoint (`.pt`/`.ckpt`). Load
+  checkpoints only from trusted sources; loading uses
+  `torch.load(weights_only=False)`.
+- Two-stage workflow: `scripts/extract_embeddings.py` + `scripts/train_dinov3.py`
+  driven by `configs/dinov3_linear.yaml`.
+- Lazy optional-deps surface: `from src.models import classification` works
+  without DINOv3 deps installed; `classification.DINOv3CustomWeights` raises an
   actionable `ImportError` if deps are absent.
 
-Not included (later phases): full fine-tune (P6), PEFT/LoRA (P7),
-SINCHI checkpoint flavours (P8), sample configs & full docs (P9).
+Still deferred (raise `NotImplementedError`):
+
+- Full-backbone fine-tuning — `DINOv3Classifier(freeze_backbone=False)`.
+- PEFT/LoRA training — `DINOv3Linear._wrap_with_peft`.
+
+See [`docs/dinov3.md`](dinov3.md) for the supported workflow.
 
 ## License
 

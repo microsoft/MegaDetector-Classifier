@@ -61,6 +61,16 @@ print(torch.cuda.is_available())  # should print True on a CUDA-enabled machine
 
 CPU training is supported but will be slower for larger datasets.
 
+## Optional: DINOv3 classification
+
+DINOv3 classification is an optional, experimental path for embedding extraction, two-stage linear-head training, and Amazon Rainforest inference. Install its dependencies only if you need it:
+
+```bash
+pip install -r requirements-dinov3.txt
+```
+
+These dependencies are optional — the base MegaDetector-Classifier pipeline works without them. See [DINOv3 classification](dinov3.md) for gated-access setup, model sizes, inference examples, and the two-stage workflow.
+
 ## Next Steps
 
 - Download [demo data](https://zenodo.org/records/15376499/files/demo_data_clf.zip) for an immediate end-to-end test

@@ -42,6 +42,8 @@ python main.py
 
 Demo data is available on [Zenodo](https://zenodo.org/records/15376499/files/demo_data_clf.zip) for immediate testing without your own dataset. See the [Usage Guide](usage.md) for a full walkthrough.
 
+For the optional, experimental DINOv3 classification path (embedding extraction, linear-head training, and Amazon Rainforest inference), see [DINOv3 classification](dinov3.md).
+
 ---
 
 ## Part of the Biodiversity Ecosystem
