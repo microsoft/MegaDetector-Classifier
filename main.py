@@ -55,8 +55,26 @@ def main(
     """
 
     # GPU configuration: set up GPUs based on availability and user specification
-    gpus = gpus if torch.cuda.is_available() else None
-    gpus = [int(i) for i in gpus.split(',')]
+    if torch.cuda.is_available():
+        # Sanitize and validate the GPU list provided via CLI
+        if gpus is None:
+            parsed_gpus = None
+        else:
+            tokens = [token.strip() for token in str(gpus).split(",") if token.strip()]
+            if not tokens:
+                # Empty or whitespace-only input: fall back to CPU
+                parsed_gpus = None
+            else:
+                try:
+                    parsed_gpus = [int(token) for token in tokens]
+                except ValueError as exc:
+                    raise typer.BadParameter(
+                        f"Invalid GPU list '{gpus}'. Expected a comma-separated list of integers, e.g. '0,1,2'."
+                    ) from exc
+        gpus = parsed_gpus
+    else:
+        # No CUDA devices available: train on CPU
+        gpus = None
 
     # Environment variable setup for numpy multi-threading. It is important to avoid cpu and ram issues.
     os.environ["OMP_NUM_THREADS"] = str(np_threads)
@@ -66,7 +84,7 @@ def main(
     os.environ["NUMEXPR_NUM_THREADS"] = str(np_threads)
     # Load and set configurations from the YAML file
     with open(config) as f:
-        conf = Munch(yaml.load(f, Loader=yaml.FullLoader))
+        conf = Munch(yaml.safe_load(f))
     conf.evaluate = evaluate
     conf.val = val
     conf.test = test
@@ -155,8 +173,9 @@ def main(
         max_epochs=conf.num_epochs,
         check_val_every_n_epoch=1, 
         log_every_n_steps = conf.log_interval, 
-        accelerator='gpu',
-        devices=gpus,
+        # gpus is None when CUDA is unavailable or the GPU list is empty
+        accelerator='gpu' if gpus else 'cpu',
+        devices=gpus if gpus else 'auto',
         logger=None if evaluate is not None else logger,
         callbacks=[lr_monitor, checkpoint_callback],
         strategy='auto',
