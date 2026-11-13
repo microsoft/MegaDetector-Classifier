@@ -151,7 +151,8 @@ class PlainResNetInference(BaseClassifierInference):
         else:
             img = Image.fromarray(img)
         img = self.transform(img)
-        logits = self.forward(img.unsqueeze(0).to(self.device))
+        with torch.no_grad():
+            logits = self.forward(img.unsqueeze(0).to(self.device))
         return self.results_generation(logits.cpu(), [img_id], id_strip=id_strip)[0]
 
     def batch_image_classification(self, data_path=None, det_results=None, id_strip=None):
@@ -179,15 +180,15 @@ class PlainResNetInference(BaseClassifierInference):
         total_logits = []
         total_paths = []
 
-        with tqdm(total=len(dataloader)) as pbar: 
+        with torch.no_grad(), tqdm(total=len(dataloader)) as pbar:
             for batch in dataloader:
                 imgs, paths = batch
                 imgs = imgs.to(self.device)
-                total_logits.append(self.forward(imgs))
+                total_logits.append(self.forward(imgs).cpu())
                 total_paths.append(paths)
                 pbar.update(1)
 
-        total_logits = torch.cat(total_logits, dim=0).cpu()
+        total_logits = torch.cat(total_logits, dim=0)
         total_paths = np.concatenate(total_paths, axis=0)
 
         return self.results_generation(total_logits, total_paths, id_strip=id_strip)
