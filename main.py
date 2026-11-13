@@ -73,8 +73,7 @@ def main(
                     ) from exc
         gpus = parsed_gpus
     else:
-        # If no CUDA devices are available, set gpus to None to indicate CPU usage
-        # PyTorch Lightning Trainer will default to CPU if devices is None
+        # No CUDA devices available: train on CPU
         gpus = None
 
     # Environment variable setup for numpy multi-threading. It is important to avoid cpu and ram issues.
@@ -174,8 +173,9 @@ def main(
         max_epochs=conf.num_epochs,
         check_val_every_n_epoch=1, 
         log_every_n_steps = conf.log_interval, 
-        accelerator='gpu',
-        devices=gpus,
+        # gpus is None when CUDA is unavailable or the GPU list is empty
+        accelerator='gpu' if gpus else 'cpu',
+        devices=gpus if gpus else 'auto',
         logger=None if evaluate is not None else logger,
         callbacks=[lr_monitor, checkpoint_callback],
         strategy='auto',
