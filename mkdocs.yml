@@ -1,6 +1,6 @@
 site_name: MegaDetector-Classifier
 site_url: https://microsoft.github.io/MegaDetector-Classifier/
-site_description: "MegaDetector-Classifier — Microsoft AI for Good Lab's open-source classification fine-tuning tool for camera-trap species identification. Part of the PyTorch-Wildlife ecosystem."
+site_description: "MegaDetector-Classifier — Microsoft AI for Good Lab's open-source classification fine-tuning tool for camera-trap species identification. Part of the microsoft/Biodiversity ecosystem."
 docs_dir: docs
 site_dir: site
 repo_url: https://github.com/microsoft/MegaDetector-Classifier

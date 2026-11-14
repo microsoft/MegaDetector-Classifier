@@ -1,12 +1,12 @@
 # MegaDetector-Classifier
 
-Microsoft AI for Good Lab's open-source classification fine-tuning tool — train custom species classifiers on your own camera-trap datasets and deploy them through PyTorch-Wildlife.
+Microsoft AI for Good Lab's open-source classification fine-tuning tool — train custom species classifiers on your own camera-trap datasets, using MegaDetector crops produced by sparrow-engine.
 
 [![License](https://img.shields.io/github/license/microsoft/MegaDetector-Classifier)](https://github.com/microsoft/MegaDetector-Classifier/blob/main/LICENSE)
-[![Python 3.9+](https://img.shields.io/badge/python-3.9%2B-blue.svg)](https://www.python.org/downloads/)
-[![PyTorch-Wildlife](https://img.shields.io/badge/PyTorch--Wildlife-ecosystem-green.svg)](https://github.com/microsoft/Biodiversity)
+[![Python 3.11+](https://img.shields.io/badge/python-3.11%2B-blue.svg)](https://www.python.org/downloads/)
+[![sparrow-engine](https://img.shields.io/badge/sparrow--engine-detection-green.svg)](https://github.com/microsoft/SPARROW-Engine)
 
-MegaDetector-Classifier is part of the [microsoft/Biodiversity](https://github.com/microsoft/Biodiversity) ecosystem and is powered by the [PyTorch-Wildlife](https://github.com/microsoft/PytorchWildlife) framework. It is free, open-source, and available under the MIT license.
+MegaDetector-Classifier is part of the [microsoft/Biodiversity](https://github.com/microsoft/Biodiversity) ecosystem and uses [sparrow-engine](https://github.com/microsoft/SPARROW-Engine) to run MegaDetector before training. It is free, open-source, and available under the MIT license.
 
 ## Part of the Biodiversity Ecosystem
 
@@ -16,7 +16,8 @@ MegaDetector-Classifier is one tool in a larger open-source ecosystem from the M
 |---|---|
 | [microsoft/Biodiversity](https://github.com/microsoft/Biodiversity) | The umbrella repository — documentation hub for the AI for Good Lab's biodiversity work |
 | [microsoft/MegaDetector](https://github.com/microsoft/MegaDetector) | Animal, human, and vehicle detection for camera-trap images |
-| [microsoft/PytorchWildlife](https://github.com/microsoft/PytorchWildlife) | The collaborative deep learning framework that hosts MegaDetector, species classifiers, and demo notebooks |
+| [microsoft/SPARROW-Engine](https://github.com/microsoft/SPARROW-Engine) | Inference engine for MegaDetector and species classifiers (`pip install sparrow-engine`); used here for detection and cropping |
+| [microsoft/PytorchWildlife](https://github.com/microsoft/PytorchWildlife) | The earlier PyTorch framework for MegaDetector and species classifiers; this repo no longer depends on it |
 | [microsoft/MegaDetector-Acoustic](https://github.com/microsoft/MegaDetector-Acoustic) | Bioacoustic AI for audio-based wildlife detection and classification |
 | [microsoft/MegaDetector-Overhead](https://github.com/microsoft/MegaDetector-Overhead) | Wildlife detection in aerial and drone imagery |
 | [microsoft/MegaDetector-Sonar](https://github.com/microsoft/MegaDetector-Sonar) | Sonar-based wildlife detection for aquatic monitoring |
@@ -25,7 +26,7 @@ MegaDetector-Classifier is one tool in a larger open-source ecosystem from the M
 
 ## Overview
 
-MegaDetector-Classifier is a training toolkit for fine-tuning ResNet-based species classifiers on custom camera-trap image datasets. The output weights integrate directly with the [PyTorch-Wildlife](https://github.com/microsoft/PytorchWildlife) framework, making it straightforward to deploy a classifier trained on your own data.
+MegaDetector-Classifier is a training toolkit for fine-tuning ResNet-based species classifiers on custom camera-trap image datasets. Images are first passed through MegaDetector with [sparrow-engine](https://github.com/microsoft/SPARROW-Engine); the animal crops are what the classifier is trained on.
 
 **Key capabilities:**
 - ResNet-18 and ResNet-50 classifier training using PyTorch Lightning
@@ -35,7 +36,7 @@ MegaDetector-Classifier is a training toolkit for fine-tuning ResNet-based speci
 
 **Designed for:**
 - Conservation practitioners adapting existing classifiers to new geographic regions
-- Researchers adding new species to the PyTorch-Wildlife model zoo
+- Researchers building classifiers for new species or regions
 - Projects running MegaDetector detection upstream and needing a matched classifier downstream
 
 ## Installation
@@ -57,7 +58,16 @@ conda env create -f environment.yaml
 conda activate PT_Finetuning
 ```
 
-**Requirements:** Python 3.9+
+**Requirements:** Python 3.11+ (required by sparrow-engine)
+
+`requirements.txt` installs the CPU build of sparrow-engine, which runs detection on the CPU. For GPU detection on a CUDA machine, swap in the GPU build (never install both):
+
+```bash
+pip uninstall -y sparrow-engine
+pip install sparrow-engine-gpu
+```
+
+Classifier training uses PyTorch and the GPUs passed with `--gpus`, independently of which sparrow-engine build is installed.
 
 ## Quick Start
 
@@ -68,7 +78,9 @@ conda activate PT_Finetuning
 python main.py
 ```
 
-Output weights are saved to the `weights/` directory and can be loaded directly into PyTorch-Wildlife.
+Before training, `main.py` runs MegaDetector on the images listed in `train_annotations.csv` and `val_annotations.csv` and writes the crops to `<dataset_root>/cropped_resized/`. The detector model (default `MDV6-yolov10-e`) is downloaded by sparrow-engine on first use; set `detector_model` and `detection_threshold` in `configs/config.yaml` to change it.
+
+Output weights are saved to the `weights/` directory. Trained weights load with the bundled `src.models.classification` loaders (for example `CustomWeights`). To run a trained classifier inside sparrow-engine, export it to ONNX and add a `manifest.toml`, as described in the sparrow-engine user manual (custom classifiers section).
 
 ## Data Preparation
 
@@ -90,7 +102,7 @@ The CSV must contain three columns:
 
 | Column | Description | Example |
 |---|---|---|
-| `path` | Relative path to the image | `imgs/leopard_001.jpg` |
+| `path` | Image file name inside `dataset_root` | `leopard_001.jpg` |
 | `classification` | Integer class ID | `0` |
 | `label` | Human-readable class name | `leopard` |
 
@@ -118,9 +130,9 @@ unzip demo_data_clf.zip -d data/
 
 Then set `dataset_root: ./data/imgs` in `configs/config.yaml` and run `python main.py`.
 
-## Loading PytorchWildlife classifiers
+## Loading pretrained classifiers
 
-In addition to training a custom classifier, MegaDetector-Classifier ships a PyTorch-Wildlife–compatible inference layer. Pretrained species classifiers can be loaded with a single import — the same `classification` subpackage layout that PyTorch-Wildlife exposes:
+In addition to training a custom classifier, MegaDetector-Classifier ships an inference layer for pretrained species classifiers. It keeps the `classification` subpackage layout that PyTorch-Wildlife used, so existing loader code ports with a changed import:
 
 ```python
 from src.models import classification as pw_classification
@@ -162,27 +174,27 @@ MegaDetector-Classifier/
 └── src/
     ├── algorithms/
     │   └── plain.py                 # Training algorithm (PyTorch Lightning)
-    ├── data/                        # Inference data layer (PyTorch-Wildlife-compatible)
+    ├── data/                        # Inference data layer
     │   ├── transforms.py            # Classification / MegaDetector transforms
     │   └── datasets.py              # ImageFolder / DetectionCrops loaders
     ├── datasets/
     │   └── custom.py                # Custom training dataset loader
     ├── models/
     │   ├── plain_resnet.py          # ResNet-18/50 training classifier
-    │   └── classification/          # Inference classifiers (PyTorch-Wildlife-compatible)
+    │   └── classification/          # Inference classifiers
     │       ├── base_classifier.py
     │       ├── resnet_base/         # AI4GAmazon, AI4GOpossum, Serengeti, CustomWeights
     │       ├── timm_base/           # DeepfauneClassifier, DFNE
     │       └── speciesnet_base/     # SpeciesNetTFInference (optional)
     └── utils/
-        ├── batch_detection_cropping.py   # MegaDetector crop integration
+        ├── batch_detection_cropping.py   # MegaDetector cropping via sparrow-engine
         ├── data_splitting.py             # Random / location / sequence splits
         └── utils.py                      # Shared utilities
 ```
 
 ## Citation
 
-If you use MegaDetector-Classifier in your research, please cite the PyTorch-Wildlife paper:
+If you use MegaDetector-Classifier in your research, please cite the PyTorch-Wildlife paper, which describes the fine-tuning method:
 
 ```bibtex
 @misc{hernandez2024pytorchwildlife,
@@ -200,4 +212,4 @@ You can also cite this software directly using the [`citation.cff`](citation.cff
 
 Issues, feature requests, and pull requests are welcome at [microsoft/MegaDetector-Classifier/issues](https://github.com/microsoft/MegaDetector-Classifier/issues).
 
-For framework-level changes (PyTorch-Wildlife API, models, datasets), see [microsoft/PytorchWildlife](https://github.com/microsoft/PytorchWildlife). For ecosystem-wide questions, see the [microsoft/Biodiversity](https://github.com/microsoft/Biodiversity) umbrella.
+For detector models or inference-engine issues, see [microsoft/SPARROW-Engine](https://github.com/microsoft/SPARROW-Engine). For ecosystem-wide questions, see the [microsoft/Biodiversity](https://github.com/microsoft/Biodiversity) umbrella.

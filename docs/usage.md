@@ -1,12 +1,12 @@
 ---
-description: "How to use MegaDetector-Classifier — data preparation, splitting strategies, configuration, training, and integrating output weights with PyTorch-Wildlife."
+description: "How to use MegaDetector-Classifier — data preparation, splitting strategies, configuration, training, and using the trained weights."
 tags:
   - MegaDetector-Classifier usage
   - camera-trap classification training
   - data splitting
   - config.yaml
   - species classification fine-tuning
-  - PyTorch-Wildlife integration
+  - sparrow-engine
 ---
 
 # Usage Guide
@@ -33,7 +33,7 @@ The CSV must contain exactly these three columns:
 
 | Column | Type | Description | Example |
 |---|---|---|---|
-| `path` | string | Relative path to the image from the CSV location | `imgs/leopard_001.jpg` |
+| `path` | string | Image file name inside `dataset_root` (crops are matched by file name) | `leopard_001.jpg` |
 | `classification` | integer | Unique integer ID for each class | `0` |
 | `label` | string | Human-readable class name | `leopard` |
 
@@ -87,6 +87,17 @@ All training parameters live in `configs/config.yaml`. Edit this file before run
 | `batch_size` | Images per batch (default: `32`) |
 | `num_workers` | Dataloader worker processes (default: `4`) |
 
+### Detection Parameters
+
+Before training, `main.py` runs MegaDetector through sparrow-engine on every image listed in the train and validation CSVs and writes the crops to `<dataset_root>/cropped_resized/`.
+
+| Parameter | Description | Default |
+|---|---|---|
+| `detector_model` | sparrow-engine model id used for detection. Downloaded on first use if missing. `MDV5a` works only if already installed locally, since the model zoo lists it as link-only. | `MDV6-yolov10-e` |
+| `detection_threshold` | Minimum detection confidence for a box to be cropped | `0.2` |
+
+Every detection above the threshold is cropped, including `person` and `vehicle` boxes, and each crop takes the label of its source image row. The crop file name starts with the MegaDetector class id (`0` animal, `1` person, `2` vehicle). The default `MDV6-yolov10-e` model is licensed AGPL-3.0 by its upstream; check that this fits your use, or set another detector. The `path` column of each CSV must hold image file names (for example `leopard_001.jpg`), because crops are matched to rows by file name.
+
 ### Model Parameters
 
 | Parameter | Description |
@@ -109,7 +120,7 @@ All training parameters live in `configs/config.yaml`. Edit this file before run
 | `step_size` | LR scheduler step size (epochs) |
 | `gamma` | LR scheduler decay factor |
 
-> **Architecture note:** The current version supports only `PlainResNetClassifier` with ResNet-18 or ResNet-50 backbones. The classifier head and feature extractor are trained with separate optimizers, which is required for compatibility with the PyTorch-Wildlife framework.
+> **Architecture note:** The current version supports only `PlainResNetClassifier` with ResNet-18 or ResNet-50 backbones. The classifier head and feature extractor are trained with separate optimizers, which matches the layout expected by the bundled `CustomWeights` loader.
 
 ---
 
@@ -138,7 +149,7 @@ python main.py
 
 ## 5. Output
 
-Trained weights are saved to the `weights/` directory at the end of training. These weights follow the PyTorch-Wildlife classifier interface and can be loaded directly into the framework for inference on new images.
+Trained weights are saved to the `weights/` directory at the end of training. Trained weights load with the bundled `src.models.classification` loaders (for example `CustomWeights`). To run a trained classifier inside sparrow-engine, export it to ONNX and add a `manifest.toml`, as described in the sparrow-engine user manual (custom classifiers section).
 
 ---
 
@@ -146,7 +157,7 @@ Trained weights are saved to the `weights/` directory at the end of training. Th
 
 A common workflow pairs MegaDetector detection upstream with MegaDetector-Classifier downstream:
 
-1. Run [MegaDetector](https://github.com/microsoft/MegaDetector) on your camera-trap images to detect and crop animals
-2. Use `src/utils/batch_detection_cropping.py` to generate cropped images from MegaDetector outputs
-3. Train MegaDetector-Classifier on the cropped detections
-4. Deploy the resulting classifier through [PyTorch-Wildlife](https://github.com/microsoft/PytorchWildlife)
+1. `main.py` runs [MegaDetector](https://github.com/microsoft/MegaDetector) through [sparrow-engine](https://github.com/microsoft/SPARROW-Engine) (`src/utils/batch_detection_cropping.py`) on the annotated images
+2. Animal detections are cropped and resized into `<dataset_root>/cropped_resized/`
+3. The classifier is trained on the crops
+4. At deployment, run MegaDetector with sparrow-engine and classify each animal crop with the trained weights

@@ -6,7 +6,7 @@ tags:
   - species identification
   - fine-tuning
   - transfer learning
-  - PyTorch-Wildlife
+  - sparrow-engine
   - conservation AI
 ---
 
@@ -14,17 +14,17 @@ tags:
 
 **Open-source classification fine-tuning for camera-trap species identification.**
 
-MegaDetector-Classifier is a training toolkit from the [Microsoft AI for Good Lab](https://www.microsoft.com/en-us/research/group/ai-for-good-research-lab/) for fine-tuning ResNet-based species classifiers on custom camera-trap image datasets. Output weights integrate directly with the [PyTorch-Wildlife](https://github.com/microsoft/PytorchWildlife) framework. It is part of the [microsoft/Biodiversity](https://github.com/microsoft/Biodiversity) ecosystem.
+MegaDetector-Classifier is a training toolkit from the [Microsoft AI for Good Lab](https://www.microsoft.com/en-us/research/group/ai-for-good-research-lab/) for fine-tuning ResNet-based species classifiers on custom camera-trap image datasets. MegaDetector detection and cropping run through [sparrow-engine](https://github.com/microsoft/SPARROW-Engine). It is part of the [microsoft/Biodiversity](https://github.com/microsoft/Biodiversity) ecosystem.
 
 ---
 
 ## What It Does
 
-MegaDetector-Classifier takes your labeled camera-trap images and produces a trained classifier ready to deploy in PyTorch-Wildlife:
+MegaDetector-Classifier takes your labeled camera-trap images and produces a trained classifier:
 
 1. **Data preparation** — flat image directory + a simple `annotations.csv`; three splitting strategies (random, location, sequence) designed for camera-trap realities
 2. **Training** — ResNet-18 or ResNet-50 classifiers via PyTorch Lightning, configured entirely through `config.yaml`
-3. **Output** — trained weights saved to `weights/`, ready to load into PyTorch-Wildlife for inference
+3. **Output** — trained weights saved to `weights/`, loadable with the bundled `src.models.classification` loaders; running it in sparrow-engine requires ONNX export plus a model manifest
 
 ---
 
@@ -50,9 +50,10 @@ MegaDetector-Classifier is one tool in a larger open-source ecosystem from the M
 
 | Repository | Description |
 |---|---|
-| [microsoft/Biodiversity](https://github.com/microsoft/Biodiversity) | Umbrella hub — PyTorch-Wildlife, MegaDetector, ecosystem overview |
+| [microsoft/Biodiversity](https://github.com/microsoft/Biodiversity) | Umbrella hub — MegaDetector and ecosystem overview |
 | [microsoft/MegaDetector](https://github.com/microsoft/MegaDetector) | Animal, human, and vehicle detection for camera-trap images |
-| [microsoft/PytorchWildlife](https://github.com/microsoft/PytorchWildlife) | The collaborative deep learning framework for wildlife monitoring |
+| [microsoft/SPARROW-Engine](https://github.com/microsoft/SPARROW-Engine) | Inference engine for MegaDetector and species classifiers; used here for detection and cropping |
+| [microsoft/PytorchWildlife](https://github.com/microsoft/PytorchWildlife) | The earlier PyTorch framework for MegaDetector; no longer a dependency of this repo |
 | [microsoft/MegaDetector-Acoustic](https://github.com/microsoft/MegaDetector-Acoustic) | Bioacoustic AI for audio-based wildlife detection and classification |
 | [microsoft/MegaDetector-Classifier](https://github.com/microsoft/MegaDetector-Classifier) | **This repo** — classification fine-tuning for camera-trap species identification |
 | [microsoft/SPARROW](https://github.com/microsoft/SPARROW) | Solar-Powered Acoustic and Remote Recording Observation Watch — AI-enabled edge device |

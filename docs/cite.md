@@ -1,5 +1,5 @@
 ---
-description: "How to cite MegaDetector-Classifier — BibTeX and citation.cff entries for the PyTorch-Wildlife camera-trap classification fine-tuning tool."
+description: "How to cite MegaDetector-Classifier — BibTeX and citation.cff entries for the camera-trap classification fine-tuning tool."
 tags:
   - cite MegaDetector-Classifier
   - MegaDetector citation
@@ -10,7 +10,7 @@ tags:
 
 # :fountain_pen: Cite Us
 
-If you use MegaDetector-Classifier in your research, please cite the PyTorch-Wildlife paper:
+If you use MegaDetector-Classifier in your research, please cite the PyTorch-Wildlife paper, which describes the fine-tuning method:
 
 ```bibtex
 @misc{hernandez2024pytorchwildlife,

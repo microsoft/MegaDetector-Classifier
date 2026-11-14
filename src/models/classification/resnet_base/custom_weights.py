@@ -14,7 +14,7 @@ __all__ = [
 class CustomWeights(PlainResNetInference):
     """
     Custom Weight Classifier that inherits from PlainResNetInference.
-    This classifier can load any model that was based on the PytorchWildlife finetuning tool.
+    This classifier can load any model that was trained with this fine-tuning tool (or the earlier PytorchWildlife fine-tuning tool).
     """
     
     # Image size for the classifier
