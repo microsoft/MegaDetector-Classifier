@@ -17,15 +17,19 @@ This page walks through the full MegaDetector-Classifier workflow: preparing you
 
 ## 1. Data Structure
 
-Images must be stored in a single **flat directory** (no subdirectories). An `annotations.csv` file placed alongside (not inside) the images directory maps each image to its class.
+Images must be stored in a single **flat directory** (no subdirectories). An annotations CSV in the same directory maps each image to its class.
 
 ```plaintext
 MegaDetector-Classifier/
 ├── data/
-│   ├── imgs/                       # All images stored here (flat — no nested folders)
-│   └── annotation_example.csv      # Annotations file
+│   └── imgs/                         # dataset_root: all images stored here (flat)
+│       ├── leopard_001.jpg
+│       ├── ...
+│       └── annotation_example.csv    # split_path: annotations file
 └── configs/config.yaml
 ```
+
+Keep the annotations CSV inside `dataset_root`: `main.py` writes `train_annotations.csv`, `val_annotations.csv` and `test_annotations.csv` next to `split_path` and reads them back from `dataset_root`, so the two directories must be the same.
 
 ### Annotation File Format
 

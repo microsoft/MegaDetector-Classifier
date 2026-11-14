@@ -86,15 +86,19 @@ Output weights are saved to the `weights/` directory. Trained weights load with 
 
 ### Data Structure
 
-Images should be stored in a single flat directory (no nested subdirectories). An `annotations.csv` file — placed outside the images directory — maps each image to its class:
+Images should be stored in a single flat directory (no nested subdirectories). An annotations CSV in the same directory maps each image to its class:
 
 ```plaintext
 MegaDetector-Classifier/
 ├── data/
-│   ├── imgs/                       # All images stored here (flat)
-│   └── annotation_example.csv      # Annotations file
+│   └── imgs/                         # dataset_root: all images stored here (flat)
+│       ├── leopard_001.jpg
+│       ├── ...
+│       └── annotation_example.csv    # split_path: annotations file
 └── configs/config.yaml
 ```
+
+Keep the annotations CSV inside `dataset_root`: `main.py` writes `train_annotations.csv`, `val_annotations.csv` and `test_annotations.csv` next to `split_path` and reads them back from `dataset_root`, so the two directories must be the same.
 
 ### Annotation File Format
 
