@@ -1,5 +1,5 @@
 """
-This is a Pytorch-Wildlife loader for the Deepfaune classifier.
+This is a loader for the Deepfaune classifier.
 The original Deepfaune model is available at: https://www.deepfaune.cnrs.fr/en/
 Licence: CC BY-SA 4.0
 Copyright CNRS 2024

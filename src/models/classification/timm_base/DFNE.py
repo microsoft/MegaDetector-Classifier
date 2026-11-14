@@ -1,5 +1,5 @@
 """
-This is a Pytorch-Wildlife loader for the Deepfaune-New-England classifier.
+This is a loader for the Deepfaune-New-England classifier.
 The original model is available at: https://code.usgs.gov/vtcfwru/deepfaune-new-england/-/tree/main?ref_type=heads
 Licence: CC0 1.0 Universal 
 Copyright USGS 2024

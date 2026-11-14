@@ -3,7 +3,7 @@ description: "How to install and set up MegaDetector-Classifier for camera-trap 
 tags:
   - MegaDetector-Classifier installation
   - camera-trap classification setup
-  - PyTorch-Wildlife
+  - sparrow-engine
   - fine-tuning setup
   - wildlife monitoring
 ---
@@ -12,7 +12,7 @@ tags:
 
 ## Requirements
 
-- Python 3.9+
+- Python 3.11+ (required by sparrow-engine)
 - PyTorch 2.0+
 - CUDA (optional, but recommended for faster training)
 
@@ -28,7 +28,9 @@ This installs the following dependencies:
 
 | Package | Purpose |
 |---|---|
-| `PytorchWildlife` | Core models and framework integration |
+| `sparrow-engine` | Runs MegaDetector to crop animals before training (CPU build) |
+| `supervision` | Detection containers and crop writing |
+| `timm` | Backbones for the bundled pretrained classifier loaders |
 | `lightning` | Training loop and checkpointing (PyTorch Lightning) |
 | `scikit_learn` | Data splitting utilities |
 | `munch` | YAML config as dot-accessible object |
@@ -46,9 +48,12 @@ conda activate PT_Finetuning
 ## Verify
 
 ```python
-from PytorchWildlife.models import classification as pw_classification
-print("MegaDetector-Classifier is ready.")
+import sparrow_engine
+from src.models import classification
+print(sparrow_engine.__version__, sparrow_engine.active_device())
 ```
+
+Run this from the repository root.
 
 ## GPU Setup
 
@@ -60,6 +65,13 @@ print(torch.cuda.is_available())  # should print True on a CUDA-enabled machine
 ```
 
 CPU training is supported but will be slower for larger datasets.
+
+The `sparrow-engine` package in `requirements.txt` is the CPU build, so MegaDetector runs on the CPU. For GPU detection, replace it with the GPU build. Install only one of the two:
+
+```bash
+pip uninstall -y sparrow-engine
+pip install sparrow-engine-gpu
+```
 
 ## Next Steps
 

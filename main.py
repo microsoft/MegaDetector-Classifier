@@ -91,18 +91,20 @@ def main(
             raise ValueError('Invalid split type: {}. Available options: random, location, sequence.'.format(conf.split_type))
         
     if not conf.predict:
+        detector_kwargs = dict(model=conf.get('detector_model', batch_detection_cropping.DEFAULT_DETECTOR),
+                               threshold=conf.get('detection_threshold', batch_detection_cropping.DEFAULT_THRESHOLD))
         # Get the path to the annotation files, and we only want to do this if we are not predicting
         if conf.test:
             test_annotations = os.path.join(conf.dataset_root, 'test_annotations.csv')
             # Crop test data (most likely we don't need this)
-            batch_detection_cropping.batch_detection_cropping(conf.dataset_root, os.path.join(conf.dataset_root, "cropped_resized"), test_annotations)
+            batch_detection_cropping.batch_detection_cropping(conf.dataset_root, os.path.join(conf.dataset_root, "cropped_resized"), test_annotations, **detector_kwargs)
         else:
             train_annotations = os.path.join(conf.dataset_root, 'train_annotations.csv')
             val_annotations = os.path.join(conf.dataset_root, 'val_annotations.csv')
             # Crop training data
-            batch_detection_cropping.batch_detection_cropping(conf.dataset_root, os.path.join(conf.dataset_root, "cropped_resized"), train_annotations)
+            batch_detection_cropping.batch_detection_cropping(conf.dataset_root, os.path.join(conf.dataset_root, "cropped_resized"), train_annotations, **detector_kwargs)
             # Crop validation data
-            batch_detection_cropping.batch_detection_cropping(conf.dataset_root, os.path.join(conf.dataset_root, "cropped_resized"), val_annotations)
+            batch_detection_cropping.batch_detection_cropping(conf.dataset_root, os.path.join(conf.dataset_root, "cropped_resized"), val_annotations, **detector_kwargs)
 
     # Dataset and algorithm loading based on the configuration
     dataset = datasets.__dict__[conf.dataset_name](conf=conf)

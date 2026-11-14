@@ -31,9 +31,9 @@ body:
       label: Environment
       description: Please specify the software and hardware you used to produce the bug.
       placeholder: |
-        - PytorchWildlife: 1.3.0
+        - sparrow-engine: 0.1.32 (CPU or GPU build)
         - OS: Ubuntu 22.04
-        - Python: 3.10.0
+        - Python: 3.11.0
         - CUDA: 12.1 (or CPU)
     validations:
       required: false

@@ -1,4 +1,4 @@
-PytorchWildlife
+sparrow-engine
 scikit_learn
 lightning
 munch
@@ -8,3 +8,5 @@ wget
 supervision
 Pillow
 tqdm
+pandas
+opencv-python-headless
